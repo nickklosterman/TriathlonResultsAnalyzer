@@ -1,0 +1,15 @@
+{
+  "name": "WedNightTriStats",
+  "version": "0.0.0",
+  "description": "Parser and Display of Speedy Feet Triathlon Results",
+  "main": "program.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+    "dependencies":{
+	"request":"*",
+	"cheerio":"*"
+    },
+  "author": "Nick Klosterman",
+  "license": "ISC"
+}
