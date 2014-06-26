@@ -1,0 +1,6 @@
+*.gif
+#*.*#
+*.*~
+test.db
+index.html
+node_modules/
