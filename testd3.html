@@ -28,6 +28,7 @@ d3.select(".chart")
     .data(data1)
   .enter().append("div")
     .style("width", function(d) { return x(d.e) + "px"; })
+
     .text(function(d) { return d.e; });
 
 </script>

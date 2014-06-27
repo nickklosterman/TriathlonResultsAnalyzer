@@ -4,36 +4,6 @@
     <meta charset="utf-8">
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <!-- <script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.4.8/d3.min.js"></script> -->
-
-    <style>
-      .chart div {
-      font: 10px sans-serif;
-      background-color: steelblue;
-      text-align: right;
-      padding: 3px;
-      margin: 1px;
-      color: white;
-
-    </style>
-    <script>
-
-      <!-- function draw(data) { -->
-      <!-- d3.select("body") -->
-      <!-- .append("div") -->
-      <!-- .attr("class","chart") -->
-      <!-- .selectAll(".bar") -->
-      <!-- .data(data) -->
-      <!-- .enter() -->
-      <!-- .append("div") -->
-      <!-- .attr("class","bar") -->
-      <!-- .style("width", function(d){return d.Bike_Rate_MPH + "px"}) -->
-      <!-- .style("outline", "1px solid black") -->
-      <!-- //.text(function(d){return Math.round(d.Bike_Rate_MPH)}); -->
-      <!-- //"use strict"; -->
-      <!-- } -->
-
-
-    </script>
   </head>
   <body>
 
@@ -62,7 +32,8 @@
 //      alert ("The selected option is " + selectedOption.value);
       plot(selectedOption.value);
       }
-      var data1 = [{Bike_Rate_MPH:21},{Bike_Rate_MPH:12},{Bike_Rate_MPH:22}]
+
+
       var data2=[
       {Place:1, Name:'Cody Bohachek', Bib_No:119, Age:28, Gender:'M', Age_Group:'1 25-29', Swim_Rnk:4, Swim_Time:'12:21.2', Swim_Time_TenthsOfSeconds:7412, T1_Rnk:2, T1_Time:'0:21.2', T1_Time_TenthsOfSeconds:212, Bike_Rnk:2, Bike_Time:'52:01.6', Bike_Time_TenthsOfSeconds:31216, Bike_Rate_MPH:23.9, T2_Rnk:1, T2_Time:'0:19.2', T2_Time_TenthsOfSeconds:192, Run_Rnk:3, Run_Time:'19:47.7', Run_Time_TenthsOfSeconds:11877, Run_Pace:'5:49/M', Overall_Time:'1:24:51.1', Overall_Time_TenthsOfSeconds:50911}
       ,
@@ -519,8 +490,6 @@ break;
       break;
       }
       }
-//      plot("Overall_Time_TenthsOfSeconds");
-//      plot("Run_Time_TenthsOfSeconds");
       plot("Age");
 
     </script>

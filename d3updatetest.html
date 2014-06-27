@@ -122,10 +122,9 @@ var svg= d3.select(".myDiv").append("svg")
       .attr("y", function(d,i) { return i*15+10}) 
 
       text.text(function(d) { return d[field] })
-
-
       text.exit().remove();
       break;
+
       case "3":
       var rect = svg.selectAll("rect")
       .data(data);
@@ -149,7 +148,6 @@ var svg= d3.select(".myDiv").append("svg")
       .attr("height",0)
       .remove();
 
-
       var text= svg.selectAll("text")
       .data(data)
 
@@ -159,14 +157,11 @@ var svg= d3.select(".myDiv").append("svg")
       .attr("y", function(d,i) { return i*15+10}) 
 
       text.text(function(d) { return d[field] })
-
-
       text.exit().remove();
       break;
 
       }
       }
-
 
 //initial call to populate graph
       update("Age");
