@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <!-- <script src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.4.8/d3.min.js"></script> -->
+
+    <style>
+      .chart div {
+      font: 10px sans-serif;
+      background-color: steelblue;
+      text-align: right;
+      padding: 3px;
+      margin: 1px;
+      color: white;
+
+    </style>
+  </head>
+  <body>
+
+    Select an item from the list: <br />
+    <select onchange="showStats(this)">
+      <option value="Age">Age</option>
+      <option value="Height">Height</option>
+      <option value="Weight">Weight</option>
+    </select>
+<div class="myDiv"></div>
+    <script>
+      function showStats (select) {
+      var selectedOption = select.options[select.selectedIndex];
+//      alert ("The selected option is " + selectedOption.value);
+      update(selectedOption.value);
+      }
+var width = 960,
+height = 300;
+
+var svg= d3.select(".myDiv").append("svg")
+.attr("width",width)
+.attr("height",height)
+.append("g")
+
+      var data = [
+      {Age:12,Height:45,Weight: 44},
+      {Age:2,Height:21,Weight: 9},
+      {Age:15,Height:35,Weight: 42},
+      {Age:13,Height:25,Weight: 45}
+      ]
+      
+      function update(field) { 
+      var switcher="3";
+
+      switch(switcher) {
+      case "1":
+      var rect = svg.selectAll("rect")
+      .data(data);
+
+      rect.enter().append("rect")
+      .attr("x", 10)
+      .attr("y", function(d,i) { return i*15})
+      .attr("width", function(d) { return d[field]*10 })
+      .attr("height",12)
+      .attr("fill", "blue")
+
+      rect.exit().remove();
+      break;
+      case "1r":
+      var rect = svg.selectAll("rect")
+      .data(data);
+
+      rect.enter().append("rect")
+      .attr("x", 10)
+      .attr("y", function(d,i) { return i*15})
+      .attr("width", function(d) { return d[field]*10 })
+      .attr("height",12)
+      .attr("fill", "blue")
+
+      rect.transition().duration(1000)
+      .attr("x", 10)
+      .attr("y", function(d,i) { return i*15})
+      .attr("width", function(d) { return d[field]*10 })
+      .attr("height",12)
+
+      rect.exit()
+      .transition().duration(100)
+      .attr("width", 0)
+      .attr("height",0)
+      
+      .remove();
+      break;
+
+      case "1c":
+      var circle = svg.selectAll("circle")
+      .data(data);
+
+      circle.enter().append("circle") //insert("svg:circle")
+      .attr("cx", 90)
+      .attr("cy", function(d,i) { return i*25+20})
+      .attr("r", function(d) { return d[field] })
+      .attr("fill", "blue")
+
+      circle.transition().duration(1000)
+      .attr("cx", 90)
+      .attr("cy", function(d,i) { return i*25+20})
+      .attr("r", function(d) { return d[field] })
+
+      circle.exit()
+      .transition()
+      .duration(100)
+      .attr("r",0)
+      .remove();
+
+      break;
+      case "2":
+
+      //this works
+      var text= svg.selectAll("text")
+      .data(data)
+
+      text.enter()
+      .append("text")
+      .attr("x", function(d, i) { return 0 })
+      .attr("y", function(d,i) { return i*15+10}) 
+
+      text.text(function(d) { return d[field] })
+
+
+      text.exit().remove();
+      break;
+      case "3":
+      var rect = svg.selectAll("rect")
+      .data(data);
+
+      rect.enter().append("rect")
+      .attr("x", 10)
+      .attr("y", function(d,i) { return i*15})
+      .attr("width", function(d) { return d[field]*10 })
+      .attr("height",12)
+      .attr("fill", "blue")
+
+      rect.transition().duration(1000)
+      .attr("x", 10)
+      .attr("y", function(d,i) { return i*15})
+      .attr("width", function(d) { return d[field]*10 })
+      .attr("height",12)
+
+      rect.exit()
+      .transition().duration(100)
+      .attr("width", 0)
+      .attr("height",0)
+      .remove();
+
+
+      var text= svg.selectAll("text")
+      .data(data)
+
+      text.enter()
+      .append("text")
+      .attr("x", function(d, i) { return 0 })
+      .attr("y", function(d,i) { return i*15+10}) 
+
+      text.text(function(d) { return d[field] })
+
+
+      text.exit().remove();
+      break;
+
+      }
+      }
+
+
+//initial call to populate graph
+      update("Age");
+    </script>
+  </body>
+</html>

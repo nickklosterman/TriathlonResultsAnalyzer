@@ -19,6 +19,51 @@ var MinMax = {
     Overall_Time:{min:Min_Sentinel,max:Max_Sentinel}
 }
 
+var DataArray = {
+    Age : [],
+    Swim_Time:[],
+    T1_Time:[],
+    Bike_Time:[],
+    Bike_Rate_MPH:[],
+    T2_Time:[],
+    Run_Time:[],
+    Run_Rate:[],
+    Overall_Time:[]
+}
+
+var StatsArray = {
+
+}
+
+function computeStatsOnDataArray(){
+
+    for (var item in DataArray){
+//	console.log(Object.getOwnPropertyNames(item));
+	computeStat(DataArray[item])
+    }
+//	computeStat(DataArray["Age"])
+}
+
+function computeStat(item) {
+//console.log(typeof item);
+//console.log(item);
+//    if (typeof item === 'Array'){
+    if (true){
+	var length = item.length,
+	sum=0;
+	sum=item.reduce(function(p,c,i,a){
+	    if (typeof c !== 'undefined') {
+//		console.log(p+":"+c);
+		return parseInt(p)+parseInt(c)
+	    }else { 
+		return p
+	    }
+	})
+//	console.log(Object.getOwnPropertyNames(item)+":"+sum/length);
+	console.log(sum+":"+sum/length);
+    }
+}
+
 var url = "http://www.speedy-feet.com/races/2014/0618/cc2-tri.htm" //the DNFs at the end I think are bc people only got one lap of the run in before the skies opened and they made them come in.
 var CC2014Tri1="http://www.speedy-feet.com/races/2014/0604/cc1_ov.htm" //this was a super sprint or something bc the times are much lower
 if ( false ) {
@@ -84,9 +129,25 @@ function printMinMax() {
     //console.log("zz Max:"+MinMax.zz.Max+" zz Min:"+MinMax.zz.Min);
 
 }
+function printMinMaxJSON() {
+    console.log("{");
+    console.log("Age:{ Max:"+MinMax.Age.max+", Min:"+MinMax.Age.min);
+    console.log("},Swim_Time :{ Max:"+MinMax.Swim_Time.max+",  Min:"+MinMax.Swim_Time.min);
+    console.log("},T1_Time:{ Max:"+MinMax.T1_Time.max+",  Min:"+MinMax.T1_Time.min);
+    console.log("},Bike_Time:{ Max:"+MinMax.Bike_Time.max+",  Min:"+MinMax.Bike_Time.min);
+    console.log("},Bike_Rate:{ Max:"+MinMax.Bike_Rate_MPH.max+", Min:"+MinMax.Bike_Rate_MPH.min);
+    console.log("},T2_Time:{ Max:"+MinMax.T2_Time.max+", Min:"+MinMax.T2_Time.min);
+    console.log("},Run_Time:{ Max:"+MinMax.Run_Time.max+", Min:"+MinMax.Run_Time.min);
+    console.log("},Run_Rate:{ Max:"+MinMax.Run_Rate.max+", Min:"+MinMax.Run_Rate.min);
+    console.log("},Overall_Time:{ Max:"+MinMax.Overall_Time.max+", Min:"+MinMax.Overall_Time.min);
+    console.log("}}");
+
+
+}
+
 function minMaxCompare(obj,value){
-    console.log(obj)
-    console.log(value)
+//    console.log(obj)
+//    console.log(value)
 
     if (value !== '' && value > 0) {
 	if (obj.min === Min_Sentinel && obj.max === Max_Sentinel) {
@@ -117,6 +178,25 @@ function Compare(p,n,b,a,g,ag,sw,st,t1r,t1t,br,bt,brt,t2r,t2t,rr,rt,rp,ot){
     //MinMax.=minMaxCompare(MinMax.,);
 }
 
+function addToDataArray(p,n,b,a,g,ag,sw,st,t1r,t1t,br,bt,brt,t2r,t2t,rr,rt,rp,ot){
+    DataArray.Age.push(validateAge(a));
+    DataArray.Swim_Time.push(validateSwimTime(parseTimeToTenthsOfSeconds(st),"750m"));
+
+    DataArray.T1_Time.push(validateTransitionTime(parseTimeToTenthsOfSeconds(t1t)));
+
+    DataArray.Bike_Time.push(validateBikeTime(parseTimeToTenthsOfSeconds(bt),"34k"));
+    DataArray.Bike_Rate_MPH.push(validateBikeRateMPH(brt));
+
+    DataArray.T2_Time.push(validateTransitionTime(parseTimeToTenthsOfSeconds(t2t)));
+
+    DataArray.Run_Time.push(validateRunTime(parseTimeToTenthsOfSeconds(rt),"5k"));
+    DataArray.Run_Rate.push(rp);
+
+    DataArray.Overall_Time.push(parseTimeToTenthsOfSeconds(ot));
+
+
+}
+
 function printRowData(p,n,b,a,g,ag,sw,st,t1r,t1t,br,bt,brt,t2r,t2t,rr,rt,rp,ot){
     //console.log("Place : Name: Bib_No : Age : Gender : Age_Group : Swim_Rnk : Swim_Time : T1_Rank : T1_Time : Bike_Rnk : Bike_Time : Bike_Rate_MPH : T2_Rank : T2_Time : Run_Rnk : Run_Time : Run_Pace : Overall_Time")
     console.log(p+" : "+n+" : "+b+" : "+a+" : "+g+" : "+ag+" : "+sw+" : "+st+" : "+t1r+" : "+t1t+" : "+br+" : "+bt+" : "+brt+" : "+t2r+" : "+t2t+" : "+rr+" : "+rt+" : "+rp+" : "+ot);
@@ -145,6 +225,13 @@ function validateNoNBSP(field){
 To make the validation smart, I could assume a gaussian distribution. Then chop off any outliers as not being true values.
 The removal of outliers would have to be used judiciously but nothing crazy. 
 ***/
+
+function validateAge(a) {
+if (a> 10 && a < 100){
+return a
+}
+return undefined
+};
 
 //swim times usually are good since it is usually mass start timed and no timing mat is involved. 
 //but the exit mat could cause a problem.
@@ -237,13 +324,20 @@ function parseRowIntoObjects(tableRows){
 	    //printRowData(Place , Name, Bib_No , Age , Gender , Age_Group , Swim_Rnk , Swim_Time , T1_Rank , T1_Time , Bike_Rnk , Bike_Time , Bike_Rate_MPH , T2_Rank , T2_Time , Run_Rnk , Run_Time , Run_Pace , Overall_Time);
 	    //	    printRowData(Place , Name, Bib_No , Age , Gender , Age_Group , Swim_Rnk , Swim_Time , T1_Rnk , T1_Time , Bike_Rnk , Bike_Time , Bike_Rate_MPH , T2_Rnk , T2_Time , Run_Rnk , Run_Time , Run_Pace , Overall_Time);
 	    printRowDataJSON(Place , Name, Bib_No , Age , Gender , Age_Group , Swim_Rnk , Swim_Time , Swim_Time_TenthsOfSeconds, T1_Rnk , T1_Time , T1_Time_TenthsOfSeconds, Bike_Rnk , Bike_Time , Bike_Time_TenthsOfSeconds, Bike_Rate_MPH , T2_Rnk , T2_Time ,T2_Time_TenthsOfSeconds, Run_Rnk , Run_Time , Run_Time_TenthsOfSeconds, Run_Pace , Overall_Time, Overall_Time_TenthsOfSeconds);
-// perform comparison to get min max	    Compare(Place , Name, Bib_No , Age , Gender , Age_Group , Swim_Rnk , Swim_Time , T1_Rnk , T1_Time , Bike_Rnk , Bike_Time , Bike_Rate_MPH , T2_Rnk , T2_Time , Run_Rnk , Run_Time , Run_Pace , Overall_Time);
 
+// perform comparison to get min max
+	    Compare(Place , Name, Bib_No , Age , Gender , Age_Group , Swim_Rnk , Swim_Time , T1_Rnk , T1_Time , Bike_Rnk , Bike_Time , Bike_Rate_MPH , T2_Rnk , T2_Time , Run_Rnk , Run_Time , Run_Pace , Overall_Time);
+// extra fields	    Compare(Place , Name, Bib_No , Age , Gender , Age_Group , Swim_Rnk , Swim_Time , Swim_Time_TenthsOfSeconds, T1_Rnk , T1_Time , T1_Time_TenthsOfSeconds, Bike_Rnk , Bike_Time , Bike_Time_TenthsOfSeconds, Bike_Rate_MPH , T2_Rnk , T2_Time ,T2_Time_TenthsOfSeconds, Run_Rnk , Run_Time , Run_Time_TenthsOfSeconds, Run_Pace , Overall_Time, Overall_Time_TenthsOfSeconds);
+
+//	    Stats(Place , Name, Bib_No , Age , Gender , Age_Group , Swim_Rnk , Swim_Time , T1_Rnk , T1_Time , Bike_Rnk , Bike_Time , Bike_Rate_MPH , T2_Rnk , T2_Time , Run_Rnk , Run_Time , Run_Pace , Overall_Time);
+	    addToDataArray(Place , Name, Bib_No , Age , Gender , Age_Group , Swim_Rnk , Swim_Time , T1_Rnk , T1_Time , Bike_Rnk , Bike_Time , Bike_Rate_MPH , T2_Rnk , T2_Time , Run_Rnk , Run_Time , Run_Pace , Overall_Time);
 	    if(counter<length-1) {console.log(',')} //add comma at end of each object to make valid json
 	}
     }
     console.log(']'); //add closing array bracket for json
-//    printMinMax();
+    printMinMax();
+//console.log(DataArray["Age"]);
+    computeStatsOnDataArray();
 }
 
 //need an object of each record and then an stats/aggregator object that has max of each field
