@@ -1,7 +1,7 @@
 To run web server: 
 python3:
 >python -m http.server 8080 &
-
+>python -m http.server -b localhost 
 >npm install -g http-server
 >http-server -p 8080
  

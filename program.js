@@ -21,12 +21,20 @@ var MinMax = {
 
 var url = "http://www.speedy-feet.com/races/2014/0618/cc2-tri.htm" //the DNFs at the end I think are bc people only got one lap of the run in before the skies opened and they made them come in.
 var CC2014Tri1="http://www.speedy-feet.com/races/2014/0604/cc1_ov.htm" //this was a super sprint or something bc the times are much lower
+if ( false ) {
 request (url, function(err, resp, body) {
     $ = cheerio.load(body,{normalizeWhitespace:true});
     var tableRows=$('tr')
     //    console.log( typeof tableRows );
     parseRowIntoObjects(tableRows);
 });
+}
+if (true) {
+$ = cheerio.load(fs.readFileSync("cc2-tri.htm",'utf8'),{normalizeWhitespace:true});
+    var tableRows=$('tr')
+    //    console.log( typeof tableRows );
+    parseRowIntoObjects(tableRows);
+}
 
 function parseTimeToTenthsOfSeconds(time){
     //console.log(time);
@@ -113,16 +121,24 @@ function printRowData(p,n,b,a,g,ag,sw,st,t1r,t1t,br,bt,brt,t2r,t2t,rr,rt,rp,ot){
     //console.log("Place : Name: Bib_No : Age : Gender : Age_Group : Swim_Rnk : Swim_Time : T1_Rank : T1_Time : Bike_Rnk : Bike_Time : Bike_Rate_MPH : T2_Rank : T2_Time : Run_Rnk : Run_Time : Run_Pace : Overall_Time")
     console.log(p+" : "+n+" : "+b+" : "+a+" : "+g+" : "+ag+" : "+sw+" : "+st+" : "+t1r+" : "+t1t+" : "+br+" : "+bt+" : "+brt+" : "+t2r+" : "+t2t+" : "+rr+" : "+rt+" : "+rp+" : "+ot);
 }
-function printRowDataJSON(p,n,b,a,g,ag,sw,st,t1r,t1t,br,bt,brt,t2r,t2t,rr,rt,rp,ot){
+function printRowDataJSON(p,n,b,a,g,ag,sw,st,stt,t1r,t1t,t1tt,br,bt,btt,brt,t2r,t2t,t2tt,rr,rt,rtt,rp,ot,ott){
     //console.log("Place : Name: Bib_No : Age : Gender : Age_Group : Swim_Rnk : Swim_Time : T1_Rank : T1_Time : Bike_Rnk : Bike_Time : Bike_Rate_MPH : T2_Rank : T2_Time : Run_Rnk : Run_Time : Run_Pace : Overall_Time")
-    console.log("{Place:"+p+", Name:'"+n+"', Bib_No:"+b+", Age:"+a+", Gender:'"+g+"', Age_Group:'"+ag+"', Swim_Rnk:"+sw+", Swim_Time:'"+st+"', T1_Rnk:"+t1r+", T1_Time:'"+t1t+"', Bike_Rnk:"+br+", Bike_Time:'"+bt+"', Bike_Rate_MPH:"+brt+", T2_Rnk:"+t2r+", T2_Time:'"+t2t+"', Run_Rnk:"+rr+", Run_Time:'"+rt+"', Run_Pace:'"+rp+"', Overall_Time:'"+ot+"'}");
+    var place = isNaN(p)?"'"+p+"'":p;
+    var bike_rate_mph = isNaN(brt)?undefined:brt;
+    bike_rate_mph = bike_rate_mph===''?undefined:bike_rate_mph;
+    var run_rank = rr==='DQ'?"'"+rr+"'":rr;
+    console.log("{Place:"+place+", Name:'"+n+"', Bib_No:"+b+", Age:"+a+", Gender:'"+g+"', Age_Group:'"+ag+"', Swim_Rnk:"+sw+", Swim_Time:'"+st+"', Swim_Time_TenthsOfSeconds:"+stt+", T1_Rnk:"+t1r+", T1_Time:'"+t1t+"', T1_Time_TenthsOfSeconds:"+t1tt+", Bike_Rnk:"+br+", Bike_Time:'"+bt+"', Bike_Time_TenthsOfSeconds:"+btt+", Bike_Rate_MPH:"+bike_rate_mph+", T2_Rnk:"+t2r+", T2_Time:'"+t2t+"', T2_Time_TenthsOfSeconds:"+t2tt+", Run_Rnk:"+run_rank+", Run_Time:'"+rt+"', Run_Time_TenthsOfSeconds:"+rtt+", Run_Pace:'"+rp+"', Overall_Time:'"+ot+"', Overall_Time_TenthsOfSeconds:"+ott+"}");
+}
+
+function validateNoNBSPTime(field){
+    return field!==' '?field:'';
 }
 
 function validateNoNBSP(field){
     //&nbsp; shows up as 0xc2a0 in cheerio. adding the {normalizeWhitespace:true}); solved that problem and now &nbsp; shows up as simply a space/' '
     //return field!==0xc2a0?field:'';
-//    return field!==' '?field:undefined;
-    return field!==' '?field:'';
+    return field!==' '?field:undefined;
+//    return field!==' '?field:'';
 }
 
 /****
@@ -195,18 +211,24 @@ function parseRowIntoObjects(tableRows){
 	    var Gender = validateNoNBSP(tableRows[counter].children[9].children[0].data);
 	    var Age_Group = validateNoNBSP(tableRows[counter].children[11].children[0].data);
 	    var Swim_Rnk = validateNoNBSP(tableRows[counter].children[13].children[0].data);
-	    var Swim_Time = validateNoNBSP(tableRows[counter].children[15].children[0].data);//validateSwimTime(validateNoNBSP(tableRows[counter].children[15].children[0].data),"750m");
+	    var Swim_Time = validateNoNBSPTime(tableRows[counter].children[15].children[0].data);//validateSwimTime(validateNoNBSP(tableRows[counter].children[15].children[0].data),"750m");
+	    var Swim_Time_TenthsOfSeconds = parseTimeToTenthsOfSeconds(Swim_Time);
 	    var T1_Rnk = validateNoNBSP(tableRows[counter].children[17].children[0].data);
-	    var T1_Time = validateNoNBSP(tableRows[counter].children[19].children[0].data);//validateTransitionTime(validateNoNBSP(tableRows[counter].children[19].children[0].data));
+	    var T1_Time = validateNoNBSPTime(tableRows[counter].children[19].children[0].data);//validateTransitionTime(validateNoNBSP(tableRows[counter].children[19].children[0].data));
+	    var T1_Time_TenthsOfSeconds = parseTimeToTenthsOfSeconds(T1_Time);
 	    var Bike_Rnk = validateNoNBSP(tableRows[counter].children[21].children[0].data);
-	    var Bike_Time = validateNoNBSP(tableRows[counter].children[23].children[0].data);//validateBikeTime(validateNoNBSP(tableRows[counter].children[23].children[0].data),"34k");
+	    var Bike_Time = validateNoNBSPTime(tableRows[counter].children[23].children[0].data);//validateBikeTime(validateNoNBSP(tableRows[counter].children[23].children[0].data),"34k");
+	    var Bike_Time_TenthsOfSeconds = parseTimeToTenthsOfSeconds(Bike_Time);
 	    var Bike_Rate_MPH = validateNoNBSP(tableRows[counter].children[25].children.length>0?tableRows[counter].children[25].children[0].data:'');
 	    var T2_Rnk = validateNoNBSP(tableRows[counter].children[27].children[0].data||'');
-	    var T2_Time = validateNoNBSP(tableRows[counter].children[29].children[0].data||'');//validateTransitionTime(validateNoNBSP(tableRows[counter].children[29].children[0].data||''));
+	    var T2_Time = validateNoNBSPTime(tableRows[counter].children[29].children[0].data||'');//validateTransitionTime(validateNoNBSP(tableRows[counter].children[29].children[0].data||''));
+	    var T2_Time_TenthsOfSeconds = parseTimeToTenthsOfSeconds(T2_Time);
 	    var Run_Rnk = validateNoNBSP(tableRows[counter].children[31].children[0].data||'');
-	    var Run_Time = validateNoNBSP(tableRows[counter].children[33].children.length>0?tableRows[counter].children[33].children[0].data:'');//validateRunTime(validateNoNBSP(tableRows[counter].children[33].children.length>0?tableRows[counter].children[33].children[0].data:''),"5k");
+	    var Run_Time = validateNoNBSPTime(tableRows[counter].children[33].children.length>0?tableRows[counter].children[33].children[0].data:'');//validateRunTime(validateNoNBSP(tableRows[counter].children[33].children.length>0?tableRows[counter].children[33].children[0].data:''),"5k");
+	    var Run_Time_TenthsOfSeconds = parseTimeToTenthsOfSeconds(Run_Time);
 	    var Run_Pace = validateNoNBSP(tableRows[counter].children[35].children.length>0?tableRows[counter].children[35].children[0].data:'');
-	    var Overall_Time = validateNoNBSP(tableRows[counter].children[37].children.length>0?tableRows[counter].children[37].children[0].data:'');
+	    var Overall_Time = validateNoNBSPTime(tableRows[counter].children[37].children.length>0?tableRows[counter].children[37].children[0].data:'');
+	    var Overall_Time_TenthsOfSeconds = parseTimeToTenthsOfSeconds(Overall_Time);
 
 	    //parseTimeToTenthsOfSeconds(T2_Time);
 	    //parseTimeToTenthsOfSeconds(Bike_Time);
@@ -214,7 +236,7 @@ function parseRowIntoObjects(tableRows){
 
 	    //printRowData(Place , Name, Bib_No , Age , Gender , Age_Group , Swim_Rnk , Swim_Time , T1_Rank , T1_Time , Bike_Rnk , Bike_Time , Bike_Rate_MPH , T2_Rank , T2_Time , Run_Rnk , Run_Time , Run_Pace , Overall_Time);
 	    //	    printRowData(Place , Name, Bib_No , Age , Gender , Age_Group , Swim_Rnk , Swim_Time , T1_Rnk , T1_Time , Bike_Rnk , Bike_Time , Bike_Rate_MPH , T2_Rnk , T2_Time , Run_Rnk , Run_Time , Run_Pace , Overall_Time);
-	    printRowDataJSON(Place , Name, Bib_No , Age , Gender , Age_Group , Swim_Rnk , Swim_Time , T1_Rnk , T1_Time , Bike_Rnk , Bike_Time , Bike_Rate_MPH , T2_Rnk , T2_Time , Run_Rnk , Run_Time , Run_Pace , Overall_Time);
+	    printRowDataJSON(Place , Name, Bib_No , Age , Gender , Age_Group , Swim_Rnk , Swim_Time , Swim_Time_TenthsOfSeconds, T1_Rnk , T1_Time , T1_Time_TenthsOfSeconds, Bike_Rnk , Bike_Time , Bike_Time_TenthsOfSeconds, Bike_Rate_MPH , T2_Rnk , T2_Time ,T2_Time_TenthsOfSeconds, Run_Rnk , Run_Time , Run_Time_TenthsOfSeconds, Run_Pace , Overall_Time, Overall_Time_TenthsOfSeconds);
 // perform comparison to get min max	    Compare(Place , Name, Bib_No , Age , Gender , Age_Group , Swim_Rnk , Swim_Time , T1_Rnk , T1_Time , Bike_Rnk , Bike_Time , Bike_Rate_MPH , T2_Rnk , T2_Time , Run_Rnk , Run_Time , Run_Pace , Overall_Time);
 
 	    if(counter<length-1) {console.log(',')} //add comma at end of each object to make valid json
