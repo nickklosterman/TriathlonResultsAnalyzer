@@ -1,0 +1,5 @@
+http://stackoverflow.com/questions/15567054/d3-linechart-string-domain-x-axis categorical values on axis
+
+Tutorials:
+http://alignedleft.com/tutorials/d3/ 
+https://www.dashingd3js.com/table-of-contents
