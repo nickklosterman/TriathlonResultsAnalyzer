@@ -1,1 +1,3 @@
 When a user hovers on a bar, color those with values < a different color so you can easily see who that person was beaten by in that category, possible give stat of persons rank. ie. rank: 34/107 and above or below average time by X sec; slower than fastest by X, faster than slowest by Y
+
+Add filtering of data by gender, and stats on those faster, slower than you. 
