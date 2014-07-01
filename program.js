@@ -38,16 +38,17 @@ var StatsArray = {
 function computeStatsOnDataArray(){
 
     for (var item in DataArray){
-//	console.log(Object.getOwnPropertyNames(item));
-	computeStat(DataArray[item])
+//	console.log(item)  // item is the name of the property. duh we even use it to index into DataArray
+	computeStat(DataArray[item],item)
     }
 //	computeStat(DataArray["Age"])
 }
 
-function computeStat(item) {
+function computeStat(item,itemName) {
 //console.log(typeof item);
 //console.log(item);
 //    if (typeof item === 'Array'){
+//for (var name in item) console.log(name)
     if (true){
 	var length = item.length,
 	sum=0;
@@ -59,8 +60,10 @@ function computeStat(item) {
 		return p
 	    }
 	})
-//	console.log(Object.getOwnPropertyNames(item)+":"+sum/length);
-	console.log(sum+":"+sum/length);
+//	console.log(sum+":"+sum/length);
+//console.log("{"+itemName+":"+sum/length+"}")
+var temp = (MinMax[itemName])
+temp.median=sum/length
     }
 }
 
@@ -145,6 +148,22 @@ function printMinMaxJSON() {
 
 }
 
+function printMinMaxMedianJSON() {
+    console.log("{");
+    console.log("Age:{ Max:"+MinMax.Age.max+", Min:"+MinMax.Age.min+", Median:"+MinMax.Age.median);
+    console.log("},Swim_Time :{ Max:"+MinMax.Swim_Time.max+",  Min:"+MinMax.Swim_Time.min+", Median:"+MinMax.Swim_Time.median);
+    console.log("},T1_Time:{ Max:"+MinMax.T1_Time.max+",  Min:"+MinMax.T1_Time.min+", Median:"+MinMax.T1_Time.median);
+    console.log("},Bike_Time:{ Max:"+MinMax.Bike_Time.max+",  Min:"+MinMax.Bike_Time.min+", Median:"+MinMax.Bike_Time.median);
+    console.log("},Bike_Rate:{ Max:"+MinMax.Bike_Rate_MPH.max+", Min:"+MinMax.Bike_Rate_MPH.min+", Median:"+MinMax.Bike_Rate_MPH.median);
+    console.log("},T2_Time:{ Max:"+MinMax.T2_Time.max+", Min:"+MinMax.T2_Time.min+", Median:"+MinMax.T2_Time.median);
+    console.log("},Run_Time:{ Max:"+MinMax.Run_Time.max+", Min:"+MinMax.Run_Time.min+", Median:"+MinMax.Run_Time.median);
+    console.log("},Run_Rate:{ Max:"+MinMax.Run_Rate.max+", Min:"+MinMax.Run_Rate.min+", Median:"+MinMax.Run_Rate.median);
+    console.log("},Overall_Time:{ Max:"+MinMax.Overall_Time.max+", Min:"+MinMax.Overall_Time.min+", Median:"+MinMax.Overall_Time.median);
+    console.log("}}");
+
+
+}
+
 function minMaxCompare(obj,value){
 //    console.log(obj)
 //    console.log(value)
@@ -201,13 +220,43 @@ function printRowData(p,n,b,a,g,ag,sw,st,t1r,t1t,br,bt,brt,t2r,t2t,rr,rt,rp,ot){
     //console.log("Place : Name: Bib_No : Age : Gender : Age_Group : Swim_Rnk : Swim_Time : T1_Rank : T1_Time : Bike_Rnk : Bike_Time : Bike_Rate_MPH : T2_Rank : T2_Time : Run_Rnk : Run_Time : Run_Pace : Overall_Time")
     console.log(p+" : "+n+" : "+b+" : "+a+" : "+g+" : "+ag+" : "+sw+" : "+st+" : "+t1r+" : "+t1t+" : "+br+" : "+bt+" : "+brt+" : "+t2r+" : "+t2t+" : "+rr+" : "+rt+" : "+rp+" : "+ot);
 }
-function printRowDataJSON(p,n,b,a,g,ag,sw,st,stt,t1r,t1t,t1tt,br,bt,btt,brt,t2r,t2t,t2tt,rr,rt,rtt,rp,ot,ott){
+function printRowDataJSON(p,n,b,a,g,ag,sw,st,stt,t1r,t1t,t1tt,br,bt,btt,brt,t2r,t2t,t2tt,rr,rt,rtt,rp,ot,ott,stpoot,t1poot,btpoot,t2poot,rtpoot,ar){
     //console.log("Place : Name: Bib_No : Age : Gender : Age_Group : Swim_Rnk : Swim_Time : T1_Rank : T1_Time : Bike_Rnk : Bike_Time : Bike_Rate_MPH : T2_Rank : T2_Time : Run_Rnk : Run_Time : Run_Pace : Overall_Time")
     var place = isNaN(p)?"'"+p+"'":p;
     var bike_rate_mph = isNaN(brt)?undefined:brt;
     bike_rate_mph = bike_rate_mph===''?undefined:bike_rate_mph;
     var run_rank = rr==='DQ'?"'"+rr+"'":rr;
-    console.log("{Place:"+place+", Name:'"+n+"', Bib_No:"+b+", Age:"+a+", Gender:'"+g+"', Age_Group:'"+ag+"', Swim_Rnk:"+sw+", Swim_Time:'"+st+"', Swim_Time_TenthsOfSeconds:"+stt+", T1_Rnk:"+t1r+", T1_Time:'"+t1t+"', T1_Time_TenthsOfSeconds:"+t1tt+", Bike_Rnk:"+br+", Bike_Time:'"+bt+"', Bike_Time_TenthsOfSeconds:"+btt+", Bike_Rate_MPH:"+bike_rate_mph+", T2_Rnk:"+t2r+", T2_Time:'"+t2t+"', T2_Time_TenthsOfSeconds:"+t2tt+", Run_Rnk:"+run_rank+", Run_Time:'"+rt+"', Run_Time_TenthsOfSeconds:"+rtt+", Run_Pace:'"+rp+"', Overall_Time:'"+ot+"', Overall_Time_TenthsOfSeconds:"+ott+"}");
+    console.log("{Place:"+place+
+		", Name:'"+n+
+		"', Bib_No:"+b+
+		", Age:"+a+
+		", Gender:'"+g+
+		"', Age_Group:'"+ag+
+		"', Swim_Rnk:"+sw+
+		", Swim_Time:'"+st+
+		"', Swim_Time_TenthsOfSeconds:"+stt+
+		", T1_Rnk:"+t1r+
+		", T1_Time:'"+t1t+
+		"', T1_Time_TenthsOfSeconds:"+t1tt+
+		", Bike_Rnk:"+br+
+		", Bike_Time:'"+bt+
+		"', Bike_Time_TenthsOfSeconds:"+btt+
+		", Bike_Rate_MPH:"+bike_rate_mph+
+		", T2_Rnk:"+t2r+
+		", T2_Time:'"+t2t+
+		"', T2_Time_TenthsOfSeconds:"+t2tt+
+		", Run_Rnk:"+run_rank+
+		", Run_Time:'"+rt+
+		"', Run_Time_TenthsOfSeconds:"+rtt+
+		", Run_Pace:'"+rp+
+		"', Overall_Time:'"+ot+
+		"', Overall_Time_TenthsOfSeconds:"+ott+
+		",Swim_Time_Percent_Of_Overall_Time:"+stpoot+
+		",T1_Time_Percent_Of_Overall_Time:"+t1poot+
+		",Bike_Time_Percent_Of_Overall_Time:"+btpoot+
+		",T2_Time_Percent_Of_Overall_Time:"+t2poot+
+		",Run_Time_Percent_Of_Overall_Time:"+rtpoot+
+		",AverageRank:"+ar+"}");
 }
 
 function validateNoNBSPTime(field){
@@ -317,13 +366,22 @@ function parseRowIntoObjects(tableRows){
 	    var Overall_Time = validateNoNBSPTime(tableRows[counter].children[37].children.length>0?tableRows[counter].children[37].children[0].data:'');
 	    var Overall_Time_TenthsOfSeconds = parseTimeToTenthsOfSeconds(Overall_Time);
 
+
+	    var SwimTimePercentageOfOverallTime = Swim_Time_TenthsOfSeconds/Overall_Time_TenthsOfSeconds;
+	    var T1TimePercentageOfOverallTime = T1_Time_TenthsOfSeconds/Overall_Time_TenthsOfSeconds;
+	    var BikeTimePercentageOfOverallTime = Bike_Time_TenthsOfSeconds/Overall_Time_TenthsOfSeconds;
+	    var T2TimePercentageOfOverallTime = T2_Time_TenthsOfSeconds/Overall_Time_TenthsOfSeconds;
+	    var RunTimePercentageOfOverallTime = Run_Time_TenthsOfSeconds/Overall_Time_TenthsOfSeconds;
+	    var AverageRank = (parseInt(Swim_Rnk,10) + parseInt(T1_Rnk,10) + parseInt(T2_Rnk,10) + parseInt(Bike_Rnk,10) + parseInt(Run_Rnk,10) ) / 5.0;
+
+
 	    //parseTimeToTenthsOfSeconds(T2_Time);
 	    //parseTimeToTenthsOfSeconds(Bike_Time);
 	    //parseTimeToTenthsOfSeconds(Overall_Time);
 
 	    //printRowData(Place , Name, Bib_No , Age , Gender , Age_Group , Swim_Rnk , Swim_Time , T1_Rank , T1_Time , Bike_Rnk , Bike_Time , Bike_Rate_MPH , T2_Rank , T2_Time , Run_Rnk , Run_Time , Run_Pace , Overall_Time);
 	    //	    printRowData(Place , Name, Bib_No , Age , Gender , Age_Group , Swim_Rnk , Swim_Time , T1_Rnk , T1_Time , Bike_Rnk , Bike_Time , Bike_Rate_MPH , T2_Rnk , T2_Time , Run_Rnk , Run_Time , Run_Pace , Overall_Time);
-	    printRowDataJSON(Place , Name, Bib_No , Age , Gender , Age_Group , Swim_Rnk , Swim_Time , Swim_Time_TenthsOfSeconds, T1_Rnk , T1_Time , T1_Time_TenthsOfSeconds, Bike_Rnk , Bike_Time , Bike_Time_TenthsOfSeconds, Bike_Rate_MPH , T2_Rnk , T2_Time ,T2_Time_TenthsOfSeconds, Run_Rnk , Run_Time , Run_Time_TenthsOfSeconds, Run_Pace , Overall_Time, Overall_Time_TenthsOfSeconds);
+	    printRowDataJSON(Place , Name, Bib_No , Age , Gender , Age_Group , Swim_Rnk , Swim_Time , Swim_Time_TenthsOfSeconds, T1_Rnk , T1_Time , T1_Time_TenthsOfSeconds, Bike_Rnk , Bike_Time , Bike_Time_TenthsOfSeconds, Bike_Rate_MPH , T2_Rnk , T2_Time ,T2_Time_TenthsOfSeconds, Run_Rnk , Run_Time , Run_Time_TenthsOfSeconds, Run_Pace , Overall_Time, Overall_Time_TenthsOfSeconds,SwimTimePercentageOfOverallTime,T1TimePercentageOfOverallTime,BikeTimePercentageOfOverallTime,T2TimePercentageOfOverallTime,RunTimePercentageOfOverallTime,AverageRank);
 
 // perform comparison to get min max
 	    Compare(Place , Name, Bib_No , Age , Gender , Age_Group , Swim_Rnk , Swim_Time , T1_Rnk , T1_Time , Bike_Rnk , Bike_Time , Bike_Rate_MPH , T2_Rnk , T2_Time , Run_Rnk , Run_Time , Run_Pace , Overall_Time);
@@ -335,9 +393,64 @@ function parseRowIntoObjects(tableRows){
 	}
     }
     console.log(']'); //add closing array bracket for json
-    printMinMax();
-//console.log(DataArray["Age"]);
     computeStatsOnDataArray();
+    printMinMax();
+    printMinMaxMedianJSON();
+//console.log(DataArray["Age"]);
+
 }
 
 //need an object of each record and then an stats/aggregator object that has max of each field
+
+
+function DataObject(dataRow) {
+    this.Place = validateNoNBSP(dataRow.children[1].children[0].data);
+    this.Name = validateNoNBSP(dataRow.children[3].children[0].data);
+    this.Bib_No = validateNoNBSP(dataRow.children[5].children[0].data);
+    this.Age = validateNoNBSP(dataRow.children[7].children[0].data);
+    this.Gender = validateNoNBSP(dataRow.children[9].children[0].data);
+    this.Age_Group = validateNoNBSP(dataRow.children[11].children[0].data);
+    this.Swim_Rnk = validateNoNBSP(dataRow.children[13].children[0].data);
+    this.Swim_Time = validateNoNBSPTime(dataRow.children[15].children[0].data);//validateSwimTime(validateNoNBSP(dataRow.children[15].children[0].data),"750m");
+    this.Swim_Time_TenthsOfSeconds = parseTimeToTenthsOfSeconds(Swim_Time);
+    this.T1_Rnk = validateNoNBSP(dataRow.children[17].children[0].data);
+    this.T1_Time = validateNoNBSPTime(dataRow.children[19].children[0].data);//validateTransitionTime(validateNoNBSP(dataRow.children[19].children[0].data));
+    this.T1_Time_TenthsOfSeconds = parseTimeToTenthsOfSeconds(T1_Time);
+    this.Bike_Rnk = validateNoNBSP(dataRow.children[21].children[0].data);
+    this.Bike_Time = validateNoNBSPTime(dataRow.children[23].children[0].data);//validateBikeTime(validateNoNBSP(dataRow.children[23].children[0].data),"34k");
+    this.Bike_Time_TenthsOfSeconds = parseTimeToTenthsOfSeconds(Bike_Time);
+    this.Bike_Rate_MPH = validateNoNBSP(dataRow.children[25].children.length>0?dataRow.children[25].children[0].data:'');
+    this.T2_Rnk = validateNoNBSP(dataRow.children[27].children[0].data||'');
+    this.T2_Time = validateNoNBSPTime(dataRow.children[29].children[0].data||'');//validateTransitionTime(validateNoNBSP(dataRow.children[29].children[0].data||''));
+    this.T2_Time_TenthsOfSeconds = parseTimeToTenthsOfSeconds(T2_Time);
+    this.Run_Rnk = validateNoNBSP(dataRow.children[31].children[0].data||'');
+    this.Run_Time = validateNoNBSPTime(dataRow.children[33].children.length>0?dataRow.children[33].children[0].data:'');//validateRunTime(validateNoNBSP(dataRow.children[33].children.length>0?dataRow.children[33].children[0].data:''),"5k");
+    this.Run_Time_TenthsOfSeconds = parseTimeToTenthsOfSeconds(Run_Time);
+    this.Run_Pace = validateNoNBSP(dataRow.children[35].children.length>0?dataRow.children[35].children[0].data:'');
+    this.Overall_Time = validateNoNBSPTime(dataRow.children[37].children.length>0?dataRow.children[37].children[0].data:'');
+    this.Overall_Time_TenthsOfSeconds = parseTimeToTenthsOfSeconds(Overall_Time);
+
+
+    this.PercentageOfOverallTimeSwim = parseFloat(Swim_Time_TenthsOfSeconds/Overall_Time_TenthsOfSeconds);
+    this.PercentageOfOverallTimeT1 = T1_Time_TenthsOfSeconds/Overall_Time_TenthsOfSeconds;
+    this.PercentageOfOverallTimeBike = Bike_Time_TenthsOfSeconds/Overall_Time_TenthsOfSeconds;
+    this.PercentageOfOverallTimeT2 = T2_Time_TenthsOfSeconds/Overall_Time_TenthsOfSeconds;
+    this.PercentageOfOverallTimeRun = Run_Time_TenthsOfSeconds/Overall_Time_TenthsOfSeconds;
+    this.AvgRank = (Swim_Rnk + T1_Rnk + T2_Rnk + Bike_Rnk + Run_Rnk ) / 5.0;
+
+}
+DataObject.prototype.print=function() {
+    for (item in this){
+	if (typeof item !== 'function') {
+	    console.log(item+":"+this[item])
+	}
+    }
+}
+
+
+function StatisticalObject() {
+
+}
+StatisticalObject.prototype.print =function(){
+
+}

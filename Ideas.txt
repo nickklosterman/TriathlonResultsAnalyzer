@@ -1,3 +1,10 @@
 When a user hovers on a bar, color those with values < a different color so you can easily see who that person was beaten by in that category, possible give stat of persons rank. ie. rank: 34/107 and above or below average time by X sec; slower than fastest by X, faster than slowest by Y
 
 Add filtering of data by gender, and stats on those faster, slower than you. 
+
+highlight best event, worst event (not hard since only three) 
+a 3-d plot of swim vs bike vs run paces/times to see if one is stronger than the other
+
+stylize the swim time as waves, bike time as wheels, run time as sneakers
+
+results as half moon or half moon to show progression and each leg is color coded diff : http://www.c4cycling.org/wp-content/uploads/2013/05/BFC-infographic-1.jpg

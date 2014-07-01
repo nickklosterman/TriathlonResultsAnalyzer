@@ -14,6 +14,7 @@
 // });
 
 
+
       var data2=[
       {Place:1, Name:'Cody Bohachek', Bib_No:119, Age:28, Gender:'M', Age_Group:'1 25-29', Swim_Rnk:4, Swim_Time:'12:21.2', Swim_Time_TenthsOfSeconds:7412, T1_Rnk:2, T1_Time:'0:21.2', T1_Time_TenthsOfSeconds:212, Bike_Rnk:2, Bike_Time:'52:01.6', Bike_Time_TenthsOfSeconds:31216, Bike_Rate_MPH:23.9, T2_Rnk:1, T2_Time:'0:19.2', T2_Time_TenthsOfSeconds:192, Run_Rnk:3, Run_Time:'19:47.7', Run_Time_TenthsOfSeconds:11877, Run_Pace:'5:49/M', Overall_Time:'1:24:51.1', Overall_Time_TenthsOfSeconds:50911}
       ,
@@ -350,6 +351,24 @@ var textHeight = 10;
       .append("g")
 
 
+
+function createMenu(field) {
+
+//var field = "Name"
+var length = data2.length
+
+var target= document.getElementById("menu")
+
+var output="<select onchange='showStats(this)'>"
+for (var counter =0 ; counter < length; counter++){
+output+="<option>"+(data2[counter])[field]+"</option>"
+}
+output+="</select>"
+
+target.innerHTML = output
+};
+
+
       //it'd be nice if there was a background grid that extended to the axes
       //or a fisheye view to get it all on one screen and the fisheye gave the details of that participant
       function plot (field) { 
@@ -494,4 +513,7 @@ var textHeight = 10;
       }
       }
       plot("Age");
+
+window.onload=createMenu("Swim_Rnk");
+
 
