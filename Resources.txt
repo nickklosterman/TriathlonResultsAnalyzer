@@ -3,3 +3,9 @@ http://stackoverflow.com/questions/15567054/d3-linechart-string-domain-x-axis ca
 Tutorials:
 http://alignedleft.com/tutorials/d3/ 
 https://www.dashingd3js.com/table-of-contents
+
+SVG background pattern fill: 
+http://www.boogdesign.com/examples/svg/path-pattern-fill.svg
+http://stackoverflow.com/questions/10846504/text-with-image-background-in-svg-or-css/10853878#10853878
+http://stackoverflow.com/questions/3796025/fill-svg-path-element-with-a-background-image
+http://gis.stackexchange.com/questions/67911/texture-overlay-in-d3-map

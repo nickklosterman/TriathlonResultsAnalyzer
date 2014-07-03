@@ -25,19 +25,123 @@
       <option value="Weight">Weight</option>
     </select>
 <div class="myDiv"></div>
+
+<svg width="200" height="250" version="1.1" xmlns="http://www.w3.org/2000/svg">
+<defs>
+    <pattern id="img1" patternUnits="userSpaceOnUse" width="100" height="100">
+        <image xlink:href="che.jpg" x="0" y="0" width="100" height="100" />
+    </pattern>
+
+    <pattern id="img2" patternUnits="userSpaceOnUse" width="100" height="100">
+        <image xlink:href="MN-100.svg" x="0" y="0" width="100" height="100" />
+    </pattern>
+
+
+</defs>
+
+<path d="M5,50
+     l0,100 l100,0 l0,-100 l-100,0
+     M215,100
+     a50,50 0 1 1 -100,0 50,50 0 1 1 100,0
+     M265,50
+     l50,100 l-100,0 l50,-100
+     z"
+  fill="url(#img2)" />
+</svg>
+<hr>
+<svg width="200" height="250" version="1.1" xmlns="http://www.w3.org/2000/svg">
+<defs>
+    <pattern id="img1" patternUnits="objectBoundingBox" width="100" height="100">
+        <image xlink:href="che.jpg" x="0" y="0" width="100" height="100" />
+    </pattern>
+
+    <pattern id="img2" patternUnits="objectBoundingBox" width="100" height="100">
+        <image xlink:href="MN-100.svg" x="0" y="0" width="100" height="100" />
+    </pattern>
+</defs>
+
+<path d="M5,50
+     l0,100 l100,0 l0,-100 l-100,0
+     M215,100
+     a50,50 0 1 1 -100,0 50,50 0 1 1 100,0
+     M265,50
+     l50,100 l-100,0 l50,-100
+     z"
+  fill="url(#img2)" />
+<rect fill="url(#img2)"  x="1" y="1" width="100" height="100"/>
+<rect fill="url(#img2)"  x="20" y="40" width="65" height="75"/>
+</svg>
+
+
+<hr>
+<svg width="200" height="250" version="1.1" xmlns="http://www.w3.org/2000/svg"> 
+
+  <defs>
+<pattern id="OvalPattern" patternUnits="objectBoundingBox"
+x="0" y="0" width="70" height="70" >
+  <rect x="0" y="0" height="70" width="70" fill="#9a4"/>
+  <circle cx="35" cy="35" r="25"  style="fill:blue">
+    
+    </circle>
+  <circle cx="55" cy="50" r="7" fill="#b07" stroke-width="4" stroke="#a80">
+    
+    </circle>
+</pattern> 
+</defs>
+<rect fill="url(#OvalPattern)"  x="1" y="1" width="100" height="100"/>
+<rect fill="url(#OvalPattern)"  x="20" y="40" width="65" height="75"/>
+
+</svg>
+<hr>
+<svg width="200" height="250" version="1.1" xmlns="http://www.w3.org/2000/svg">
+
+  <rect x="10" y="10" width="30" height="30" stroke="black" fill="transparent" stroke-width="5"/>
+  <rect x="60" y="10" rx="10" ry="10" width="30" height="30" stroke="black" fill="transparent" stroke-width="5"/>
+
+  <circle cx="25" cy="75" r="20" stroke="red" fill="transparent" stroke-width="5"/>
+  <ellipse cx="75" cy="75" rx="20" ry="5" stroke="red" fill="transparent" stroke-width="5"/>
+
+  <line x1="10" x2="50" y1="110" y2="150" stroke="orange" fill="transparent" stroke-width="5"/>
+  <polyline points="60 110 65 120 70 115 75 130 80 125 85 140 90 135 95 150 100 145"
+      stroke="orange" fill="transparent" stroke-width="5"/>
+
+  <polygon points="50 160 55 180 70 180 60 190 65 205 50 195 35 205 40 190 30 180 45 180"
+      stroke="green" fill="transparent" stroke-width="5"/>
+
+  <path d="M20,230 Q40,205 50,230 T90,230" fill="none" stroke="blue" stroke-width="5"/>
+</svg>
     <script>
       function showStats (select) {
       var selectedOption = select.options[select.selectedIndex];
 //      alert ("The selected option is " + selectedOption.value);
       update(selectedOption.value);
       }
-var width = 960,
+var width = 560,
 height = 300;
 
 var svg= d3.select(".myDiv").append("svg")
 .attr("width",width)
 .attr("height",height)
+.attr("version","1.1")
+.attr("xmlns","http://www.w3.org/2000/svg")
 .append("g")
+
+
+
+var PatternDef = svg.append("svg:defs")
+.append("svg:pattern")
+.attr("id","mn")
+.attr("patternUnits","userSpaceOnUse")
+//.attr("patternUnits","objectBoundingBox")
+.attr("width","100")
+.attr("height","100")
+.append("svg:image")
+.attr("xlink:href","che.jpg")
+//.attr("xlink:href","MN-100.jpg")
+.attr("x","0")
+.attr("y","0")
+.attr("width","100")
+.attr("height","100")
 
       var data = [
       {Age:12, Height:45, Weight: 44},
@@ -174,7 +278,10 @@ var svg= d3.select(".myDiv").append("svg")
       .attr("y", function(d,i) { return i*15})
       .attr("width", function(d) { return xScale(d[field]) })
       .attr("height",12)
-      .attr("fill", "blue")
+//      .attr("fill", "blue")
+//      .attr("fill", "url(#mn)")
+//      .attr("stroke", function(d,i) { if (i%2===0) {return "url(#mn)" } else { return "blue"}})
+      .attr("fill", function(d,i) { if (i%2===0) {return "url(#mn)" } else { return "blue"}})
 
       rect.transition().duration(1000)
       .attr("x", 10)
