@@ -118,6 +118,40 @@ if (typeof time !== 'undefined' && time !== Sentinel ) {
 //    console.log(TotalTenthsOfSeconds);
     return (TotalTenthsOfSeconds);
 }
+
+function parseTimeToSeconds(time){
+    //console.log(time);
+
+if (typeof time !== 'undefined' && time !== Sentinel ) {
+    var splitTime=time.split(":");
+    var SecondsFromHour=0,
+    SecondsFromMinute=0,
+    SecondsFromSecond=0,
+    TotalSeconds=undefined;
+
+    switch (splitTime.length) {
+    case 3:
+	SecondsFromHour = parseInt(splitTime[0],10)*3600;
+	SecondsFromMinute = parseInt(splitTime[1],10)*60 
+	SecondsFromSecond = parseInt(splitTime[2],10); 
+	TotalSeconds = SecondsFromHour + SecondsFromMinute + SecondsFromSecond;
+	break; 
+    case 2:
+	SecondsFromMinute = parseInt(splitTime[0],10)*60 
+	SecondsFromSecond = parseInt(splitTime[1],10); 
+	TotalSeconds = SecondsFromHour + SecondsFromMinute + SecondsFromSecond;
+	break;
+    case 1:
+	// No one can run this fast
+	break;
+    default:
+	//throw error
+    }
+}
+//    console.log(TotalSeconds);
+    return (TotalSeconds);
+}
+
 function printMinMax() {
     console.log("Age Max:"+MinMax.Age.max+" Age Min:"+MinMax.Age.min);
     console.log("Swim_Time Max:"+MinMax.Swim_Time.max+" Swim_Time Min:"+MinMax.Swim_Time.min);
@@ -427,6 +461,9 @@ function DataObject(dataRow) {
     this.Run_Time = validateNoNBSPTime(dataRow.children[33].children.length>0?dataRow.children[33].children[0].data:'');//validateRunTime(validateNoNBSP(dataRow.children[33].children.length>0?dataRow.children[33].children[0].data:''),"5k");
     this.Run_Time_TenthsOfSeconds = parseTimeToTenthsOfSeconds(Run_Time);
     this.Run_Pace = validateNoNBSP(dataRow.children[35].children.length>0?dataRow.children[35].children[0].data:'');
+    this.Run_Pace_MinutesPerMile = this.Run_Pace.substring(0,this.Run_Pace.length-2)
+    this.Run_Pace_MinutesPerMileInSeconds = parseTimeToSeconds(this.Run_Pace_MinutesPerMile);
+
     this.Overall_Time = validateNoNBSPTime(dataRow.children[37].children.length>0?dataRow.children[37].children[0].data:'');
     this.Overall_Time_TenthsOfSeconds = parseTimeToTenthsOfSeconds(Overall_Time);
 
