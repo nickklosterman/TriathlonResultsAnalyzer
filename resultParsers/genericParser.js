@@ -69,16 +69,33 @@ temp.median=sum/length
 
 var url = "http://www.speedy-feet.com/races/2014/0618/cc2-tri.htm" //the DNFs at the end I think are bc people only got one lap of the run in before the skies opened and they made them come in.
 var CC2014Tri1="http://www.speedy-feet.com/races/2014/0604/cc1_ov.htm" //this was a super sprint or something bc the times are much lower
-var resultsName="Chicago2014";
+var resultsName= "CC3";//Chicago2014";
 switch (resultsName) {
+case "CC1": // has add'l 'pace' fields
+    $ = cheerio.load(fs.readFileSync("../data/cc1_ov.htm",'utf8'),{normalizeWhitespace:true});
+    var tableRows=$('tr')
+    parseRowIntoObjects22Fields(tableRows);
+    break;
 case "CC2":
-    $ = cheerio.load(fs.readFileSync("cc2-tri.htm",'utf8'),{normalizeWhitespace:true});
+    $ = cheerio.load(fs.readFileSync("../data/cc2-tri.htm",'utf8'),{normalizeWhitespace:true});
+    var tableRows=$('tr')
+    //    console.log( typeof tableRows );
+    parseRowIntoObjects(tableRows);
+    break;
+case "CC3": //fuck the syntax is diff, has a ton of stupid attr on the data
+    $ = cheerio.load(fs.readFileSync("../data/cc3_ov.htm",'utf8'),{normalizeWhitespace:true});
+    var tableRows=$('tr')
+    //    console.log( typeof tableRows );
+    parseRowIntoObjectsExtraAttribs(tableRows);
+    break;
+case "CC4":
+    $ = cheerio.load(fs.readFileSync("../data/cc4-ov.htm",'utf8'),{normalizeWhitespace:true});
     var tableRows=$('tr')
     //    console.log( typeof tableRows );
     parseRowIntoObjects(tableRows);
     break;
 case "Chicago2014":
-    $ = cheerio.load(fs.readFileSync("data/ChicagoTriathlon24082014/AllResults.html",'utf8'),{normalizeWhitespace:true});
+    $ = cheerio.load(fs.readFileSync("../data/ChicagoTriathlon24082014/AllResults.html",'utf8'),{normalizeWhitespace:true});
     var tableRows=$('tr')
     parseRowIntoObjectsChicago(tableRows);
     break;
@@ -272,8 +289,8 @@ function printRowDataJSON(p,n,b,a,g,ag,sw,st,stt,t1r,t1t,t1tt,br,bt,btt,brt,t2r,
     bike_rate_mph = bike_rate_mph===''?undefined:bike_rate_mph;
     var run_rank = rr==='DQ'?"'"+rr+"'":rr;
     console.log("{Place:"+place+
-		", Name:'"+n+
-		"', Bib_No:"+b+
+		", Name:\""+n+
+		"\", Bib_No:"+b+
 		", Age:"+a+
 		", Gender:'"+g+
 		"', Age_Group:'"+ag+
@@ -310,8 +327,8 @@ function printChicagoRowDataJSON(p,n,b,a,g,ag,sw,st,stt,t1r,t1t,t1tt,br,bt,btt,b
     bike_rate_mph = bike_rate_mph===''?undefined:bike_rate_mph;
     var run_rank = rr==='DQ'?"'"+rr+"'":rr;
     console.log("{Place:"+place+
-		", Name:'"+n+
-		"', Bib_No:"+b+
+		", Name:\""+n+  //handle apostrophied names like D'Angelo
+		"\", Bib_No:"+b+
 		", Age:"+a+
 		", Gender:'"+g+
 		"', Age_Group:'"+ag+
@@ -334,14 +351,14 @@ function printChicagoRowDataJSON(p,n,b,a,g,ag,sw,st,stt,t1r,t1t,t1tt,br,bt,btt,b
 		", Run_Pace:'"+rp+
 		"', Overall_Time:'"+ot+
 		"', Overall_Time_TenthsOfSeconds:"+ott+
-		",Swim_Time_Percent_Of_Overall_Time:"+stpoot+
-		",T1_Time_Percent_Of_Overall_Time:"+t1poot+
-		",Bike_Time_Percent_Of_Overall_Time:"+btpoot+
-		",T2_Time_Percent_Of_Overall_Time:"+t2poot+
-		",Run_Time_Percent_Of_Overall_Time:"+rtpoot+
-		",AverageRank:"+ar+
-		",City:"+c+
-		",State:"+s+"}");
+		", Swim_Time_Percent_Of_Overall_Time:"+stpoot+
+		", T1_Time_Percent_Of_Overall_Time:"+t1poot+
+		", Bike_Time_Percent_Of_Overall_Time:"+btpoot+
+		", T2_Time_Percent_Of_Overall_Time:"+t2poot+
+		", Run_Time_Percent_Of_Overall_Time:"+rtpoot+
+		", AverageRank:"+ar+
+		", City:'"+c+
+		"', State:'"+s+"'}");
 }
 
 function validateNoNBSPTime(field){
@@ -436,7 +453,7 @@ function parseRowIntoObjects(tableRows){
 	    var Place = validateNoNBSP(tableRows[counter].children[1].children[0].data);
 	    var Name = validateNoNBSP(tableRows[counter].children[3].children[0].data);
 	    var Bib_No = validateNoNBSP(tableRows[counter].children[5].children[0].data);
-	    var Age = validateNoNBSP(tableRows[counter].children[7].children[0].data);
+	    var Age = typeof tableRows[counter].children[7].children[0]!=='undefined'?validateNoNBSP(tableRows[counter].children[7].children[0].data):''; 
 	    var Gender = validateNoNBSP(tableRows[counter].children[9].children[0].data);
 	    var Age_Group = validateNoNBSP(tableRows[counter].children[11].children[0].data);
 	    var Swim_Rnk = validateNoNBSP(tableRows[counter].children[13].children[0].data);
@@ -492,6 +509,149 @@ function parseRowIntoObjects(tableRows){
 //console.log(DataArray["Age"]);
 
 }
+function parseRowIntoObjectsExtraAttribs(tableRows){
+    //  console.log("Place : Name: Bib_No : Age : Gender : Age_Group : Swim_Rnk : Swim_Time : T1_Rank : T1_Time : Bike_Rnk : Bike_Time : Bike_Rate_MPH : T2_Rank : T2_Time : Run_Rnk : Run_Time : Run_Pace : Overall_Time")
+    console.log('[');
+
+    for (var counter=4,length=tableRows.length; counter<length;counter++){
+	//    for (var counter=74,length=tableRows.length; counter<84/*length*/;counter++){
+	//we need to skip the first few lines since they won't have the right number of children etc. line=3 is the header of categories of the columns
+
+	//prevent header columns from being written, 
+	if (tableRows[counter].children.length > 15 && tableRows[counter].children[1].children[0].next.children[0].children[0].data !== "Place") {
+	    var Place = validateNoNBSP(tableRows[counter].children[1].children[0].next.children[0].children[0].data);
+	    var Name = validateNoNBSP(tableRows[counter].children[3].children[0].next.children[0].children[0].data);
+//                          console.log(tableRows[counter].children[3].children[0].next.children[0].children[0]);
+	    if (tableRows[counter].children[3].children[0].next.children[0].children[0].data!==''){
+		//                          console.log(tableRows[counter].children[3].children[0].next.children[0].children[0].data);
+		Name = tableRows[counter].children[3].children[0].next.children[0].children[0].data;
+	    }
+	    //find second element of split name v1
+	    if (tableRows[counter].children[3].children[0].next.children[0].children[0].next && tableRows[counter].children[3].children[0].next.children[0].children[0].next.name=="span"){
+		//console.log(tableRows[counter].children[3].children[0].next.children[0].children[0].next.children[0].data);
+		Name += tableRows[counter].children[3].children[0].next.children[0].children[0].next.children[0].data;
+	    }
+//find weird split name v2
+	    if (tableRows[counter].children[3].children[0].next.children[0].children[0].children && tableRows[counter].children[3].children[0].next.children[0].children[0].children[0].data ){
+//    console.log(tableRows[counter].children[3].children[0].next.children[0].children[0].children[0].data);
+ //   console.log(tableRows[counter].children[3].children[0].next.children[1].children[0].data);
+		Name = tableRows[counter].children[3].children[0].next.children[0].children[0].children[0].data + tableRows[counter].children[3].children[0].next.children[1].children[0].data
+	    }
+
+	    //console.log(tableRows[counter].children[3].children[0].next.children[0].children[0]);
+	    var Bib_No = validateNoNBSP(tableRows[counter].children[5].children[0].next.children[0].children[0].data);
+	    var Age = typeof tableRows[counter].children[7].children[0]!=='undefined'?validateNoNBSP(tableRows[counter].children[7].children[0].next.children[0].children[0].data):''; 
+	    var Gender = validateNoNBSP(tableRows[counter].children[9].children[0].next.children[0].children[0].data);
+	    var Age_Group = validateNoNBSP(tableRows[counter].children[11].children[0].next.children[0].children[0].data);
+	    var Swim_Rnk = validateNoNBSP(tableRows[counter].children[13].children[0].next.children[0].children[0].data);
+	    var Swim_Time = validateNoNBSPTime(tableRows[counter].children[15].children[0].next.children[0].children[0].data);//validateSwimTime(validateNoNBSP(tableRows[counter].children[15].children[0].next.children[0].children[0].data),"750m");
+	    var Swim_Time_TenthsOfSeconds = parseTimeToTenthsOfSeconds(Swim_Time);
+	    var T1_Rnk = validateNoNBSP(tableRows[counter].children[17].children[0].next.children[0].children[0].data);
+	    var T1_Time = validateNoNBSPTime(tableRows[counter].children[19].children[0].next.children[0].children[0].data);//validateTransitionTime(validateNoNBSP(tableRows[counter].children[19].children[0].next.children[0].children[0].data));
+	    var T1_Time_TenthsOfSeconds = parseTimeToTenthsOfSeconds(T1_Time);
+	    var Bike_Rnk = validateNoNBSP(tableRows[counter].children[21].children[0].next.children[0].children[0].data);
+	    var Bike_Time = validateNoNBSPTime(tableRows[counter].children[23].children[0].next.children[0].children[0].data);//validateBikeTime(validateNoNBSP(tableRows[counter].children[23].children[0].next.children[0].children[0].data),"34k");
+	    var Bike_Time_TenthsOfSeconds = parseTimeToTenthsOfSeconds(Bike_Time);
+	    var Bike_Rate_MPH = validateNoNBSP(tableRows[counter].children[25].children.length>0?tableRows[counter].children[25].children[0].next.children[0].children[0].data:'');
+	    var T2_Rnk = validateNoNBSP(tableRows[counter].children[27].children[0].next.children[0].children[0].data||'');
+	    var T2_Time = validateNoNBSPTime(tableRows[counter].children[29].children[0].next.children[0].children[0].data||'');//validateTransitionTime(validateNoNBSP(tableRows[counter].children[29].children[0].next.children[0].children[0].data||''));
+	    var T2_Time_TenthsOfSeconds = parseTimeToTenthsOfSeconds(T2_Time);
+	    var Run_Rnk = validateNoNBSP(tableRows[counter].children[31].children[0].next.children[0].children[0].data||'');
+	    var Run_Time = validateNoNBSPTime(tableRows[counter].children[33].children.length>0?tableRows[counter].children[33].children[0].next.children[0].children[0].data:'');//validateRunTime(validateNoNBSP(tableRows[counter].children[33].children.length>0?tableRows[counter].children[33].children[0].next.children[0].children[0].data:''),"5k");
+	    var Run_Time_TenthsOfSeconds = parseTimeToTenthsOfSeconds(Run_Time);
+	    var Run_Pace = validateNoNBSP(tableRows[counter].children[35].children.length>0?tableRows[counter].children[35].children[0].next.children[0].children[0].data:'');
+	    var Overall_Time = validateNoNBSPTime(tableRows[counter].children[37].children.length>0?tableRows[counter].children[37].children[0].next.children[0].children[0].data:'');
+	    var Overall_Time_TenthsOfSeconds = parseTimeToTenthsOfSeconds(Overall_Time);
+
+
+	    var SwimTimePercentageOfOverallTime = Swim_Time_TenthsOfSeconds/Overall_Time_TenthsOfSeconds;
+	    var T1TimePercentageOfOverallTime = T1_Time_TenthsOfSeconds/Overall_Time_TenthsOfSeconds;
+	    var BikeTimePercentageOfOverallTime = Bike_Time_TenthsOfSeconds/Overall_Time_TenthsOfSeconds;
+	    var T2TimePercentageOfOverallTime = T2_Time_TenthsOfSeconds/Overall_Time_TenthsOfSeconds;
+	    var RunTimePercentageOfOverallTime = Run_Time_TenthsOfSeconds/Overall_Time_TenthsOfSeconds;
+	    var AverageRank = (parseInt(Swim_Rnk,10) + parseInt(T1_Rnk,10) + parseInt(T2_Rnk,10) + parseInt(Bike_Rnk,10) + parseInt(Run_Rnk,10) ) / 5.0;
+
+
+	    printRowDataJSON(Place , Name, Bib_No , Age , Gender , Age_Group , Swim_Rnk , Swim_Time , Swim_Time_TenthsOfSeconds, T1_Rnk , T1_Time , T1_Time_TenthsOfSeconds, Bike_Rnk , Bike_Time , Bike_Time_TenthsOfSeconds, Bike_Rate_MPH , T2_Rnk , T2_Time ,T2_Time_TenthsOfSeconds, Run_Rnk , Run_Time , Run_Time_TenthsOfSeconds, Run_Pace , Overall_Time, Overall_Time_TenthsOfSeconds,SwimTimePercentageOfOverallTime,T1TimePercentageOfOverallTime,BikeTimePercentageOfOverallTime,T2TimePercentageOfOverallTime,RunTimePercentageOfOverallTime,AverageRank);
+
+// perform comparison to get min max
+	    Compare(Place , Name, Bib_No , Age , Gender , Age_Group , Swim_Rnk , Swim_Time , T1_Rnk , T1_Time , Bike_Rnk , Bike_Time , Bike_Rate_MPH , T2_Rnk , T2_Time , Run_Rnk , Run_Time , Run_Pace , Overall_Time);
+	    addToDataArray(Place , Name, Bib_No , Age , Gender , Age_Group , Swim_Rnk , Swim_Time , T1_Rnk , T1_Time , Bike_Rnk , Bike_Time , Bike_Rate_MPH , T2_Rnk , T2_Time , Run_Rnk , Run_Time , Run_Pace , Overall_Time);
+	    if(counter<length-1) {console.log(',')} //add comma at end of each object to make valid json
+	}
+    }
+    console.log(']'); //add closing array bracket for json
+    computeStatsOnDataArray();
+    printMinMax();
+    printMinMaxMedianJSON();
+//console.log(DataArray["Age"]);
+
+}
+function parseRowIntoObjects22Fields(tableRows){
+    console.log('[');
+    for (var counter=4,length=tableRows.length; counter<length;counter++){
+	//prevent header columns from being written, 
+	if (tableRows[counter].children.length > 15 && tableRows[counter].children[1].children[0].data !== "Place") {
+	    var Place = validateNoNBSP(tableRows[counter].children[1].children[0].data);
+	    var Name = validateNoNBSP(tableRows[counter].children[3].children[0].data);
+	    var Bib_No = validateNoNBSP(tableRows[counter].children[5].children[0].data);
+	    var Age = typeof tableRows[counter].children[7].children[0]!=='undefined'?validateNoNBSP(tableRows[counter].children[7].children[0].data):''; 
+	    var Gender = validateNoNBSP(tableRows[counter].children[9].children[0].data);
+	    var Age_Group = validateNoNBSP(tableRows[counter].children[11].children[0].data);
+	    var Swim_Rnk = validateNoNBSP(tableRows[counter].children[13].children[0].data);
+	    var Swim_Time = validateNoNBSPTime(tableRows[counter].children[15].children[0].data);//validateSwimTime(validateNoNBSP(tableRows[counter].children[15].children[0].data),"750m");
+	    var Swim_Time_TenthsOfSeconds = parseTimeToTenthsOfSeconds(Swim_Time);
+	    var T1_Rnk = validateNoNBSP(tableRows[counter].children[19].children[0].data);
+	    var T1_Time = validateNoNBSPTime(tableRows[counter].children[21].children[0].data);//validateTransitionTime(validateNoNBSP(tableRows[counter].children[19].children[0].data));
+	    var T1_Time_TenthsOfSeconds = parseTimeToTenthsOfSeconds(T1_Time);
+	    var Bike_Rnk = validateNoNBSP(tableRows[counter].children[25].children[0].data);
+	    var Bike_Time = validateNoNBSPTime(tableRows[counter].children[27].children[0].data);//validateBikeTime(validateNoNBSP(tableRows[counter].children[23].children[0].data),"34k");
+	    var Bike_Time_TenthsOfSeconds = parseTimeToTenthsOfSeconds(Bike_Time);
+	    var Bike_Rate_MPH = validateNoNBSP(tableRows[counter].children[29].children.length>0?tableRows[counter].children[31].children[0].data:'');
+	    var T2_Rnk = validateNoNBSP(tableRows[counter].children[31].children[0].data||'');
+	    var T2_Time = validateNoNBSPTime(tableRows[counter].children[33].children[0].data||'')
+	    var T2_Time_TenthsOfSeconds = parseTimeToTenthsOfSeconds(T2_Time);
+	    var Run_Rnk = validateNoNBSP(tableRows[counter].children[37].children[0].data||'');
+	    var Run_Time = validateNoNBSPTime(tableRows[counter].children[39].children.length>0?tableRows[counter].children[39].children[0].data:'')
+	    var Run_Time_TenthsOfSeconds = parseTimeToTenthsOfSeconds(Run_Time);
+	    var Run_Pace = validateNoNBSP(tableRows[counter].children[41].children.length>0?tableRows[counter].children[41].children[0].data:'');
+	    var Overall_Time = validateNoNBSPTime(tableRows[counter].children[43].children.length>0?tableRows[counter].children[43].children[0].data:'');
+	    var Overall_Time_TenthsOfSeconds = parseTimeToTenthsOfSeconds(Overall_Time);
+
+
+	    var SwimTimePercentageOfOverallTime = Swim_Time_TenthsOfSeconds/Overall_Time_TenthsOfSeconds;
+	    var T1TimePercentageOfOverallTime = T1_Time_TenthsOfSeconds/Overall_Time_TenthsOfSeconds;
+	    var BikeTimePercentageOfOverallTime = Bike_Time_TenthsOfSeconds/Overall_Time_TenthsOfSeconds;
+	    var T2TimePercentageOfOverallTime = T2_Time_TenthsOfSeconds/Overall_Time_TenthsOfSeconds;
+	    var RunTimePercentageOfOverallTime = Run_Time_TenthsOfSeconds/Overall_Time_TenthsOfSeconds;
+	    var AverageRank = (parseInt(Swim_Rnk,10) + parseInt(T1_Rnk,10) + parseInt(T2_Rnk,10) + parseInt(Bike_Rnk,10) + parseInt(Run_Rnk,10) ) / 5.0;
+
+
+	    //parseTimeToTenthsOfSeconds(T2_Time);
+	    //parseTimeToTenthsOfSeconds(Bike_Time);
+	    //parseTimeToTenthsOfSeconds(Overall_Time);
+
+	    //printRowData(Place , Name, Bib_No , Age , Gender , Age_Group , Swim_Rnk , Swim_Time , T1_Rank , T1_Time , Bike_Rnk , Bike_Time , Bike_Rate_MPH , T2_Rank , T2_Time , Run_Rnk , Run_Time , Run_Pace , Overall_Time);
+	    //	    printRowData(Place , Name, Bib_No , Age , Gender , Age_Group , Swim_Rnk , Swim_Time , T1_Rnk , T1_Time , Bike_Rnk , Bike_Time , Bike_Rate_MPH , T2_Rnk , T2_Time , Run_Rnk , Run_Time , Run_Pace , Overall_Time);
+	    printRowDataJSON(Place , Name, Bib_No , Age , Gender , Age_Group , Swim_Rnk , Swim_Time , Swim_Time_TenthsOfSeconds, T1_Rnk , T1_Time , T1_Time_TenthsOfSeconds, Bike_Rnk , Bike_Time , Bike_Time_TenthsOfSeconds, Bike_Rate_MPH , T2_Rnk , T2_Time ,T2_Time_TenthsOfSeconds, Run_Rnk , Run_Time , Run_Time_TenthsOfSeconds, Run_Pace , Overall_Time, Overall_Time_TenthsOfSeconds,SwimTimePercentageOfOverallTime,T1TimePercentageOfOverallTime,BikeTimePercentageOfOverallTime,T2TimePercentageOfOverallTime,RunTimePercentageOfOverallTime,AverageRank);
+
+// perform comparison to get min max
+	    Compare(Place , Name, Bib_No , Age , Gender , Age_Group , Swim_Rnk , Swim_Time , T1_Rnk , T1_Time , Bike_Rnk , Bike_Time , Bike_Rate_MPH , T2_Rnk , T2_Time , Run_Rnk , Run_Time , Run_Pace , Overall_Time);
+// extra fields	    Compare(Place , Name, Bib_No , Age , Gender , Age_Group , Swim_Rnk , Swim_Time , Swim_Time_TenthsOfSeconds, T1_Rnk , T1_Time , T1_Time_TenthsOfSeconds, Bike_Rnk , Bike_Time , Bike_Time_TenthsOfSeconds, Bike_Rate_MPH , T2_Rnk , T2_Time ,T2_Time_TenthsOfSeconds, Run_Rnk , Run_Time , Run_Time_TenthsOfSeconds, Run_Pace , Overall_Time, Overall_Time_TenthsOfSeconds);
+
+//	    Stats(Place , Name, Bib_No , Age , Gender , Age_Group , Swim_Rnk , Swim_Time , T1_Rnk , T1_Time , Bike_Rnk , Bike_Time , Bike_Rate_MPH , T2_Rnk , T2_Time , Run_Rnk , Run_Time , Run_Pace , Overall_Time);
+	    addToDataArray(Place , Name, Bib_No , Age , Gender , Age_Group , Swim_Rnk , Swim_Time , T1_Rnk , T1_Time , Bike_Rnk , Bike_Time , Bike_Rate_MPH , T2_Rnk , T2_Time , Run_Rnk , Run_Time , Run_Pace , Overall_Time);
+	    if(counter<length-1) {console.log(',')} //add comma at end of each object to make valid json
+	}
+    }
+    console.log(']'); //add closing array bracket for json
+    computeStatsOnDataArray();
+    printMinMax();
+    printMinMaxMedianJSON();
+//console.log(DataArray["Age"]);
+
+}
+
 function parseRowIntoObjectsChicago(tableRows){
     //  console.log("Place : Name: Bib_No : Age : Gender : Age_Group : Swim_Rnk : Swim_Time : T1_Rank : T1_Time : Bike_Rnk : Bike_Time : Bike_Rate_MPH : T2_Rank : T2_Time : Run_Rnk : Run_Time : Run_Pace : Overall_Time")
     console.log('[');
@@ -499,7 +659,9 @@ function parseRowIntoObjectsChicago(tableRows){
     for (var counter=1,length=tableRows.length; counter<length;counter++){
 	//prevent header columns from being written, 
 	//if (true) { //
-	if (tableRows[counter].children.length > 15 && tableRows[counter].children[1].children[0].data !== "Place") {
+	if (tableRows[counter].children.length > 15 
+	    && tableRows[counter].children[1].children[0].data !== "" 
+	    && validateNoNBSP(tableRows[counter].children[5].children[0].children[0].data) !== "") {
 	    var Place = validateNoNBSP(tableRows[counter].children[1].children[0].data);
 	    var Bib_No = validateNoNBSP(tableRows[counter].children[3].children[0].data);
 	    var Name = validateNoNBSP(tableRows[counter].children[5].children[0].children[0].data);

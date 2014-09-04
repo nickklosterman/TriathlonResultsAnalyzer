@@ -7,9 +7,10 @@
   </head>
   <body>
 
-    http://flowingdata.com/tag/d3/
+    <div>    <a href="http://flowingdata.com/tag/d3/"> FlowingData tagged D3 </a> </div>
 
-    Select an item from the list: <br />
+<table><tr><td>    Select an item to graph: </td><td> Select field to write: </td><td> Select field to write: </td><td> Select field to write: </td> <td>Sort</td><td> <label><input type="checkbox" onchange="changeSortField(this,0)" >Reverse Sort </label></td><tr>
+<tr><td>
     <select onchange="showStats(this)">
       <option value="Age">Age</option>
       <option value="Swim_Rnk">Swim Rank</option>
@@ -25,16 +26,94 @@
       <option value="Run_Time_TenthsOfSeconds">Run Time</option>
       <option value="Overall_Time_TenthsOfSeconds">Overall Time</option>
     </select>
-
-
-<div id="menu"></div>
-
+</td><td>
+    <select onchange="changeGraphText(this,1)">
+      <option value="Place">Place</option>
+      <option selected value="Name">Name</option>
+      <option value="Gender">Gender</option>
+      <option value="Age_Group">Age Group</option>
+      <option value="Age">Age</option>
+      <option value="Swim_Rnk">Swim Rank</option>
+      <option value="Swim_Time_TenthsOfSeconds">Swim Time</option>
+      <option value="T1_Rnk">T1 Rank</option>
+      <option value="T1_Time_TenthsOfSeconds">T1 Time</option>
+      <option value="Bike_Rnk">Bike Rank</option>
+      <option value="Bike_Time_TenthsOfSeconds">Bike Time</option>
+      <option value="Bike_Rate_MPH">Bike Rate (MPH)</option>
+      <option value="T2_Rnk">T2 Rank</option>
+      <option value="T2_Time_TenthsOfSeconds">T2 Time</option>
+      <option value="Run_Rnk">Run Rank</option>
+      <option value="Run_Time_TenthsOfSeconds">Run Time</option>
+      <option value="Overall_Time_TenthsOfSeconds">Overall Time</option>
+    </select>
+</td><td>
+    <select onchange="changeGraphText(this,2)">
+      <option selected value="Place">Place</option>
+      <option value="Name">Name</option>
+      <option value="Gender">Gender</option>
+      <option value="Age_Group">Age Group</option>
+      <option value="Age">Age</option>
+      <option value="Swim_Rnk">Swim Rank</option>
+      <option value="Swim_Time_TenthsOfSeconds">Swim Time</option>
+      <option value="T1_Rnk">T1 Rank</option>
+      <option value="T1_Time_TenthsOfSeconds">T1 Time</option>
+      <option value="Bike_Rnk">Bike Rank</option>
+      <option value="Bike_Time_TenthsOfSeconds">Bike Time</option>
+      <option value="Bike_Rate_MPH">Bike Rate (MPH)</option>
+      <option value="T2_Rnk">T2 Rank</option>
+      <option value="T2_Time_TenthsOfSeconds">T2 Time</option>
+      <option value="Run_Rnk">Run Rank</option>
+      <option value="Run_Time_TenthsOfSeconds">Run Time</option>
+      <option value="Overall_Time_TenthsOfSeconds">Overall Time</option>
+    </select>
+</td><td>
+    <select onchange="changeGraphText(this,3)">
+      <option value="Place">Place</option>
+      <option value="Name">Name</option>
+      <option value="Gender">Gender</option>
+      <option value="Age_Group">Age Group</option>
+      <option selected value="Age">Age</option>
+      <option value="Swim_Rnk">Swim Rank</option>
+      <option value="Swim_Time_TenthsOfSeconds">Swim Time</option>
+      <option value="T1_Rnk">T1 Rank</option>
+      <option value="T1_Time_TenthsOfSeconds">T1 Time</option>
+      <option value="Bike_Rnk">Bike Rank</option>
+      <option value="Bike_Time_TenthsOfSeconds">Bike Time</option>
+      <option value="Bike_Rate_MPH">Bike Rate (MPH)</option>
+      <option value="T2_Rnk">T2 Rank</option>
+      <option value="T2_Time_TenthsOfSeconds">T2 Time</option>
+      <option value="Run_Rnk">Run Rank</option>
+      <option value="Run_Time_TenthsOfSeconds">Run Time</option>
+      <option value="Overall_Time_TenthsOfSeconds">Overall Time</option>
+    </select>
+</td><td>
+    <select onchange="changeSortField(this,1)">
+      <option value="Place">Place</option>
+      <option value="Name">Name</option>
+      <option value="Gender">Gender</option>
+      <option value="Age_Group">Age Group</option>
+      <option value="Age">Age</option>
+      <option value="Swim_Rnk">Swim Rank</option>
+      <option value="Swim_Time_TenthsOfSeconds">Swim Time</option>
+      <option value="T1_Rnk">T1 Rank</option>
+      <option value="T1_Time_TenthsOfSeconds">T1 Time</option>
+      <option value="Bike_Rnk">Bike Rank</option>
+      <option value="Bike_Time_TenthsOfSeconds">Bike Time</option>
+      <option value="Bike_Rate_MPH">Bike Rate (MPH)</option>
+      <option value="T2_Rnk">T2 Rank</option>
+      <option value="T2_Time_TenthsOfSeconds">T2 Time</option>
+      <option value="Run_Rnk">Run Rank</option>
+      <option value="Run_Time_TenthsOfSeconds">Run Time</option>
+      <option value="Overall_Time_TenthsOfSeconds">Overall Time</option>
+    </select>
+</td><td></td></tr></table>
+<!-- <div id="menu"></div> -->
 
      <div class="chartOrig"></div> 
 <!-- <svg class="chart"></svg> -->
 
-    <script src="CC2_2014.js">
-    </script>
+    <script src="../chicago.json"></script>
+    <script src="CC2_2014.js"></script>
 
 
   </body>

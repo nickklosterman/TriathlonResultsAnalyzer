@@ -1,5 +1,4 @@
-{
-data:[
+[
       {Place:1, Name:'Cody Bohachek', Bib_No:119, Age:28, Gender:'M', Age_Group:'1 25-29', Swim_Rnk:4, Swim_Time:'12:21.2', Swim_Time_TenthsOfSeconds:7412, T1_Rnk:2, T1_Time:'0:21.2', T1_Time_TenthsOfSeconds:212, Bike_Rnk:2, Bike_Time:'52:01.6', Bike_Time_TenthsOfSeconds:31216, Bike_Rate_MPH:23.9, T2_Rnk:1, T2_Time:'0:19.2', T2_Time_TenthsOfSeconds:192, Run_Rnk:3, Run_Time:'19:47.7', Run_Time_TenthsOfSeconds:11877, Run_Pace:'5:49/M', Overall_Time:'1:24:51.1', Overall_Time_TenthsOfSeconds:50911}
       ,
       {Place:2, Name:'Christopher Cain', Bib_No:10, Age:33, Gender:'M', Age_Group:'1 30-34', Swim_Rnk:11, Swim_Time:'14:00.5', Swim_Time_TenthsOfSeconds:8405, T1_Rnk:18, T1_Time:'0:45.6', T1_Time_TenthsOfSeconds:456, Bike_Rnk:1, Bike_Time:'51:45.9', Bike_Time_TenthsOfSeconds:31059, Bike_Rate_MPH:24.0, T2_Rnk:4, T2_Time:'0:22.7', T2_Time_TenthsOfSeconds:227, Run_Rnk:7, Run_Time:'21:28.1', Run_Time_TenthsOfSeconds:12881, Run_Pace:'6:19/M', Overall_Time:'1:28:22.9', Overall_Time_TenthsOfSeconds:53029}
@@ -8,4 +7,4 @@ data:[
       ,
       {Place:4, Name:'Sean Williams', Bib_No:86, Age:31, Gender:'M', Age_Group:'2 30-34', Swim_Rnk:16, Swim_Time:'14:38.7', Swim_Time_TenthsOfSeconds:8787, T1_Rnk:11, T1_Time:'0:38.0', T1_Time_TenthsOfSeconds:380, Bike_Rnk:4, Bike_Time:'53:12.5', Bike_Time_TenthsOfSeconds:31925, Bike_Rate_MPH:23.3, T2_Rnk:6, T2_Time:'0:23.7', T2_Time_TenthsOfSeconds:237, Run_Rnk:10, Run_Time:'21:39.9', Run_Time_TenthsOfSeconds:12999, Run_Pace:'6:22/M', Overall_Time:'1:30:33.0', Overall_Time_TenthsOfSeconds:54330}
 ]
-}
+
