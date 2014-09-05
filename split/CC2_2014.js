@@ -3,7 +3,8 @@ var dataFieldToGraph ="Age"
 , graphText2 = "Age"
 , graphText3 = "Gender"
 , dataSortField = "Place"
-, dataSortReverseOrder = false;
+, dataSortReverseOrder = false
+, dataToGraph = "Chicago2014";
 
 function showStats (select) {
 //    var selectedOption = select.options[select.selectedIndex];
@@ -12,6 +13,30 @@ function showStats (select) {
 //    plot(selectedOption.value);
     replot();
 }
+
+function changeDataSource(select) {
+    dataToGraph = (select.options[select.selectedIndex]).value;
+    switch (dataToGraph) {
+	case "CC1_2014":
+	data2=cc1_data;
+	break;
+	case "CC2_2014":
+	data2=cc2_data;
+	break;
+	case "CC3_2014":
+	data2=cc3_data;
+	break;
+	case "CC4_2014":
+	data2=cc4_data;
+	break;
+	case "Chicago2014":
+	data2=chicago_data;
+	break;
+
+    }
+    replot();
+}
+
 function changeGraphText(select,key){
     switch(key){
     case 1:
@@ -351,21 +376,6 @@ function genderColor(d){
 }
 
 
-var barHeight = 12;
-var barSpacer = 15;
-var textHeight = 10;
-
-var width = 460,
-height = data2.length*barSpacer;
-
-//      var svg = d3.select(".chart")
-var svg = d3.select(".chartOrig")
-    .append("svg")
-    .attr("width",width)
-    .attr("height",height)
-    .append("g")
-
-
 //I think I was trying to automate the menu creation for the different category to be plotted.
 // when a field is passed in the data element for that field will be the option to select. Not super helpful/useful.
 function createMenu(field) {
@@ -598,6 +608,23 @@ function changeSortField(select,key) {
 //       plot("Age"); //if you use this plot, since we're async, we need to comment out the other plot() call at the bottom;
 // });
 // since our data output is a js object, it is easier, although less flexible, to copy paste the code into a variable here.
+
+
+data2=cc1_data //chicago_data
+
+
+var barHeight = 12;
+var barSpacer = 15;
+var textHeight = 10;
+
+var width = 460,
+height = data2.length*barSpacer;
+//      var svg = d3.select(".chart")
+var svg = d3.select(".chartOrig")
+    .append("svg")
+    .attr("width",width)
+    .attr("height",height)
+    .append("g")
 
 //plot an initial data set
 plot(dataFieldToGraph);

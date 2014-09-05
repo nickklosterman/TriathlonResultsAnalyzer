@@ -284,10 +284,12 @@ function printRowData(p,n,b,a,g,ag,sw,st,t1r,t1t,br,bt,brt,t2r,t2t,rr,rt,rp,ot){
 
 function printRowDataJSON(p,n,b,a,g,ag,sw,st,stt,t1r,t1t,t1tt,br,bt,btt,brt,t2r,t2t,t2tt,rr,rt,rtt,rp,ot,ott,stpoot,t1poot,btpoot,t2poot,rtpoot,ar){
     //console.log("Place : Name: Bib_No : Age : Gender : Age_Group : Swim_Rnk : Swim_Time : T1_Rank : T1_Time : Bike_Rnk : Bike_Time : Bike_Rate_MPH : T2_Rank : T2_Time : Run_Rnk : Run_Time : Run_Pace : Overall_Time")
-    var place = isNaN(p)?"'"+p+"'":p;
+    //var place = isNaN(p)?"'"+p+"'":p;
+    var place = p
     var bike_rate_mph = isNaN(brt)?undefined:brt;
     bike_rate_mph = bike_rate_mph===''?undefined:bike_rate_mph;
-    var run_rank = rr==='DQ'?"'"+rr+"'":rr;
+    //var run_rank = rr==='DQ'?"'"+rr+"'":rr;
+    var run_rank = rr
     console.log("{Place:"+place+
 		", Name:\""+n+
 		"\", Bib_No:"+b+
@@ -373,7 +375,9 @@ function validateNoNBSP(field){
     if (typeof field !== 'undefined') {
 	//&nbsp; shows up as 0xc2a0 in cheerio. adding the {normalizeWhitespace:true}); solved that problem and now &nbsp; shows up as simply a space/' '
 	//return field!==0xc2a0?field:'';
-	return field!==' '?field.trim():undefined;
+	var value= field!==' '?field.trim():undefined;
+//	return value==='DQ'?"'DQ'":value
+	return isNaN(value)?"'"+value+"'":value
 	//    return field!==' '?field:'';
     } else { 
 	return '';
@@ -518,24 +522,40 @@ function parseRowIntoObjectsExtraAttribs(tableRows){
 	//we need to skip the first few lines since they won't have the right number of children etc. line=3 is the header of categories of the columns
 
 	//prevent header columns from being written, 
-	if (tableRows[counter].children.length > 15 && tableRows[counter].children[1].children[0].next.children[0].children[0].data !== "Place") {
+
+	if (tableRows[counter].children.length > 15 
+	    && tableRows[counter].children[1].children[0].next.children[0].children[0].data !== "Place"
+	    && typeof tableRows[counter].children[1].children[0].next.children[0].children[0].data !== "undefined") {
+//	console.log(tableRows[counter].children.length + ' '+ tableRows[counter].children[1].children[0].next.children[0].children[0].data )
 	    var Place = validateNoNBSP(tableRows[counter].children[1].children[0].next.children[0].children[0].data);
 	    var Name = validateNoNBSP(tableRows[counter].children[3].children[0].next.children[0].children[0].data);
 //                          console.log(tableRows[counter].children[3].children[0].next.children[0].children[0]);
 	    if (tableRows[counter].children[3].children[0].next.children[0].children[0].data!==''){
-		//                          console.log(tableRows[counter].children[3].children[0].next.children[0].children[0].data);
+//		                          console.log(tableRows[counter].children[3].children[0].next.children[0].children[0].data);
 		Name = tableRows[counter].children[3].children[0].next.children[0].children[0].data;
+//		console.log("i");
 	    }
 	    //find second element of split name v1
 	    if (tableRows[counter].children[3].children[0].next.children[0].children[0].next && tableRows[counter].children[3].children[0].next.children[0].children[0].next.name=="span"){
-		//console.log(tableRows[counter].children[3].children[0].next.children[0].children[0].next.children[0].data);
+//		console.log(tableRows[counter].children[3].children[0].next.children[0].children[0].next.children[0].data);
 		Name += tableRows[counter].children[3].children[0].next.children[0].children[0].next.children[0].data;
+		//console.log("v1");
 	    }
 //find weird split name v2
 	    if (tableRows[counter].children[3].children[0].next.children[0].children[0].children && tableRows[counter].children[3].children[0].next.children[0].children[0].children[0].data ){
 //    console.log(tableRows[counter].children[3].children[0].next.children[0].children[0].children[0].data);
- //   console.log(tableRows[counter].children[3].children[0].next.children[1].children[0].data);
-		Name = tableRows[counter].children[3].children[0].next.children[0].children[0].children[0].data + tableRows[counter].children[3].children[0].next.children[1].children[0].data
+//   console.log("p2:"+tableRows[counter].children[3].children[0].next.children[1].children[0].data);
+		if (tableRows[counter].children[3].children[0].next.children[1].children[0].data.trim()=="" ) {
+		    //console.log("woo")
+		    //console.log(tableRows[counter].children[3].children[0].next.children[1].children[0].next.children[0].data)
+		Name = tableRows[counter].children[3].children[0].next.children[0].children[0].children[0].data 
+		    + tableRows[counter].children[3].children[0].next.children[1].children[0].next.children[0].data		    
+		} else { 
+		    Name = tableRows[counter].children[3].children[0].next.children[0].children[0].children[0].data 
+                     + tableRows[counter].children[3].children[0].next.children[1].children[0].data
+
+		}
+//		console.log("v2");
 	    }
 
 	    //console.log(tableRows[counter].children[3].children[0].next.children[0].children[0]);

@@ -2,12 +2,13 @@
 /*
   This program outputs valid json of the csv input file 
 */
-var liner = require('./liner')
-, TBR = require('./tuxedoBrosResult')
+
+var TBR = require('./tuxedoBrosResult')
 , fs = require('fs');
 
 /* 
 I was trying to use this stream method to read the file line by line but didn't know how to get the data out of the callback :(
+var liner = require('./liner')
 var arr = [];// [99,89];
 var source = fs.createReadStream('./SprintJuly14ind.csv')
 source.pipe(liner)
@@ -38,10 +39,19 @@ liner.on('readable', function(myArr) {
 // console.log("]")
 
 } )//(arr)
+
+var linerCallback=function(array){
+    var line 
+    while (line = liner.read()) { 
+	var result = new TBR(line)
+	array.push(result)
+    }
+}
+
 */
 
 //This method will fail on a very large file as you'll run out of memory
-var fileContentArray = fs.readFileSync('./data/SprintJuly14ind.csv').toString().split("\n");
+var fileContentArray = fs.readFileSync('../data/SprintJuly14ind.csv').toString().split("\n");
 
 var resultArray=[];
 
@@ -59,15 +69,6 @@ var result = new TBR(fileContentArray[i])
 //var result = new TBR(i)
 resultArray.push(result.JSONstring())
 }
-}
-
-
-var linerCallback=function(array){
-    var line 
-    while (line = liner.read()) { 
-	var result = new TBR(line)
-	array.push(result)
-    }
 }
 
 console.log("[");

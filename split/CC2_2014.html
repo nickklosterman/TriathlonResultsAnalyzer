@@ -9,7 +9,7 @@
 
     <div>    <a href="http://flowingdata.com/tag/d3/"> FlowingData tagged D3 </a> </div>
 
-<table><tr><td>    Select an item to graph: </td><td> Select field to write: </td><td> Select field to write: </td><td> Select field to write: </td> <td>Sort</td><td> <label><input type="checkbox" onchange="changeSortField(this,0)" >Reverse Sort </label></td><tr>
+<table><tr><td>    Select an item to graph: </td><td> Select field to write: </td><td> Select field to write: </td><td> Select field to write: </td> <td>Sort</td><td> <label><input type="checkbox" onchange="changeSortField(this,0)" >Reverse Sort </label></td><td>Data Source:</td><tr>
 <tr><td>
     <select onchange="showStats(this)">
       <option value="Age">Age</option>
@@ -105,6 +105,14 @@
       <option value="Run_Rnk">Run Rank</option>
       <option value="Run_Time_TenthsOfSeconds">Run Time</option>
       <option value="Overall_Time_TenthsOfSeconds">Overall Time</option>
+</td><td>
+</td><td>
+    <select onchange="changeDataSource(this)">
+      <option value="CC1_2014">Caesar's Creek 1</option>
+      <option value="CC2_2014">Caesar's Creek 2</option>
+      <option value="CC3_2014">Caesar's Creek 3</option>
+      <option value="CC4_2014">Caesar's Creek 4</option>
+      <option selected value="Chicago2014">Chicago 2014</option>
     </select>
 </td><td></td></tr></table>
 <!-- <div id="menu"></div> -->
@@ -112,7 +120,11 @@
      <div class="chartOrig"></div> 
 <!-- <svg class="chart"></svg> -->
 
-    <script src="../chicago.json"></script>
+    <script src="../data/chicago.js"></script>
+    <script src="../data/cc1_2014.js"></script>
+    <script src="../data/cc2_2014.js"></script>
+    <script src="../data/cc3_2014.js"></script>
+    <script src="../data/cc4_2014.js"></script>
     <script src="CC2_2014.js"></script>
 
 
