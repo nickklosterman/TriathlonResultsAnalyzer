@@ -1,0 +1,8 @@
+download the data
+run the data through resultParser/genericParser.js (or adapt one of the parsers to fit your needs
+save the data off and create a suitable variable name for the data set.
+add that dataset as an option to the HTML file in the split/ folder
+edit the js and add a case for this new dataset. 
+Run the python webserver and then verify that the dataset is good and can be plotted.
+I think that is it. 
+

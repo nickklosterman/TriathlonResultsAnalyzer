@@ -8,3 +8,11 @@ a 3-d plot of swim vs bike vs run paces/times to see if one is stronger than the
 stylize the swim time as waves, bike time as wheels, run time as sneakers
 
 results as half moon or half moon to show progression and each leg is color coded diff : http://www.c4cycling.org/wp-content/uploads/2013/05/BFC-infographic-1.jpg
+
+Thu Sep  4 13:32:21 EDT 2014
+Provide filtering functionality of the data set. ->on the change event, call the filter function on the desired field and then replot.
+Allow switching of the dataset.
+Allow user to select a user and then draw a vertical line dividing those faster/slower than that person.
+Or color code those people differently.
+
+Have some type of scroller that lets you see how you did compared to those who finished around the same time. A Focus+context paradigm. a scroller such that you see the results +2/-2 from you as a comparison.
